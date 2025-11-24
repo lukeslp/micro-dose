@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Street Stand Economy Game</title>
+    <meta name="description" content="Run a scrappy city stand, set prices, manage stock, and survive day to day." />
+    <link rel="stylesheet" id="standStyles" href="/games/micro-dose/styles.css" data-local="styles.css" />
+    <link rel="icon" href="/games/micro-dose/icon.svg" type="image/svg+xml" />
+</head>
+<body>
+    <header class="top-header">
+        <div>
+            <p class="eyebrow">Micro-tycoon</p>
+            <h1>Street Stand Simulator</h1>
+            <p class="intro-text">You inherited a tiny permit and a folding table. Pick your prices, prep enough stock, and keep your rep high while weather, crowds, and city inspectors keep you on your toes.</p>
+        </div>
+        <div class="stat-grid" aria-live="polite">
+            <article class="stat-card">
+                <p class="stat-label">Day</p>
+                <p class="stat-value" id="dayDisplay">1</p>
+            </article>
+            <article class="stat-card">
+                <p class="stat-label">Cash on hand</p>
+                <p class="stat-value" id="cashDisplay">$100.00</p>
+            </article>
+            <article class="stat-card">
+                <p class="stat-label">Reputation</p>
+                <p class="stat-value" id="repDisplay">50 · Local Newcomer</p>
+            </article>
+        </div>
+    </header>
+
+    <main class="main-grid">
+        <section class="panel" aria-labelledby="setupTitle">
+            <div class="panel-header">
+                <h2 id="setupTitle">Today's Setup</h2>
+                <p id="forecastText" class="forecast-text"></p>
+            </div>
+            <div class="forecast-grid">
+                <article>
+                    <h3>Weather</h3>
+                    <p id="weatherDisplay">Sunny (Comfortable)</p>
+                </article>
+                <article>
+                    <h3>Foot Traffic</h3>
+                    <p id="trafficDisplay">Normal</p>
+                </article>
+                <article>
+                    <h3>Event</h3>
+                    <p id="eventDisplay">None today</p>
+                </article>
+            </div>
+
+            <form id="dayForm" class="day-form">
+                <div class="form-row">
+                    <label for="priceInput">Price per drink ($)</label>
+                    <input type="number" id="priceInput" name="price" min="0" step="0.1" value="3" required />
+                </div>
+                <div class="form-row">
+                    <label for="unitsInput">Units to prepare</label>
+                    <input type="number" id="unitsInput" name="units" min="0" step="1" value="60" required />
+                    <small class="hint">Each unit costs ingredients upfront.</small>
+                </div>
+                <fieldset class="form-row">
+                    <legend>Marketing boost</legend>
+                    <div id="marketingOptions" class="marketing-options"></div>
+                </fieldset>
+                <p class="form-error" id="formError" aria-live="assertive"></p>
+                <button type="submit" id="runDay" class="primary">Run Day</button>
+            </form>
+            <button type="button" id="restartBtn" class="secondary hidden">Restart Game</button>
+        </section>
+
+        <section class="panel" aria-labelledby="analyticsTitle">
+            <div class="panel-header">
+                <h2 id="analyticsTitle">Charts &amp; History</h2>
+                <p class="hint">Track profit momentum and spot trends.</p>
+            </div>
+            <div class="chart-wrapper">
+                <canvas id="cashChart" width="640" height="300" aria-label="Cash over time" role="img"></canvas>
+            </div>
+            <div class="history-table-wrapper">
+                <table>
+                    <caption>Recent Days</caption>
+                    <thead>
+                        <tr>
+                            <th scope="col">Day</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">Prepared</th>
+                            <th scope="col">Sold</th>
+                            <th scope="col">Profit</th>
+                        </tr>
+                    </thead>
+                    <tbody id="historyBody"></tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <section class="panel log-panel" aria-labelledby="logTitle">
+        <div class="panel-header">
+            <h2 id="logTitle">Event Log</h2>
+            <p class="hint">Every hustle, surprise inspection, and lucky break.</p>
+        </div>
+        <div id="logFeed" class="log-feed" aria-live="polite"></div>
+    </section>
+
+    <script type="module" id="gameModule" src="/games/micro-dose/game.js" data-local="game.js"></script>
+    <script>
+        if (window.location.protocol === "file:") {
+            const style = document.getElementById("standStyles");
+            if (style && style.dataset.local) {
+                style.href = style.dataset.local;
+            }
+            const script = document.getElementById("gameModule");
+            if (script && script.dataset.local) {
+                const localScript = document.createElement("script");
+                localScript.type = "module";
+                localScript.src = script.dataset.local;
+                document.body.appendChild(localScript);
+                script.remove();
+            }
+        }
+    </script>
+</body>
+</html>
