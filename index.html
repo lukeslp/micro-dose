@@ -3,108 +3,663 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Street Stand Economy Game</title>
-    <meta name="description" content="Run a scrappy city stand, set prices, manage stock, and survive day to day." />
+    <title>Micro Dose Syndicate</title>
+    <meta name="description" content="Rebuild the classic dealer sim with modern UX, run product, dodge heat, and grow your micro-syndicate." />
     <link rel="stylesheet" id="standStyles" href="/games/micro-dose/styles.css" data-local="styles.css" />
     <link rel="icon" href="/games/micro-dose/icon.svg" type="image/svg+xml" />
 </head>
 <body>
-    <header class="top-header">
-        <div>
-            <p class="eyebrow">Micro-tycoon</p>
-            <h1>Street Stand Simulator</h1>
-            <p class="intro-text">You inherited a tiny permit and a folding table. Pick your prices, prep enough stock, and keep your rep high while weather, crowds, and city inspectors keep you on your toes.</p>
+    <!-- Onboarding Overlay -->
+    <div id="onboardingOverlay" class="onboarding-overlay hidden">
+        <div class="onboarding-modal">
+            <div class="onboarding-step" data-step="1">
+                <div class="onboarding-icon">📊</div>
+                <h3>Your Empire at a Glance</h3>
+                <p>The top row shows your day count, cash stash, street cred, and heat level. Watch these meters—they tell you if you're winning or about to get raided.</p>
+            </div>
+            <div class="onboarding-step hidden" data-step="2">
+                <div class="onboarding-icon">📝</div>
+                <h3>Tonight's Orders</h3>
+                <p>The left panel is your command center. Set your price, cook your bags, dial in the cut quality, and pick your distribution lane. Every choice has tradeoffs.</p>
+            </div>
+            <div class="onboarding-step hidden" data-step="3">
+                <div class="onboarding-icon">📡</div>
+                <h3>Street Intel</h3>
+                <p>The right panel shows what the city is telling you—forecasts before you commit, results after you run, and a history of your recent nights.</p>
+            </div>
+            <div class="onboarding-step hidden" data-step="4">
+                <div class="onboarding-icon">🌙</div>
+                <h3>Run the Night</h3>
+                <p>When you're ready, hit the big button. Watch the night unfold, learn what changed, and adapt your strategy. Each night is a contained story beat.</p>
+            </div>
+            <div class="onboarding-nav">
+                <button type="button" id="onboardingSkip" class="onboarding-skip">Skip Tour</button>
+                <div class="onboarding-dots">
+                    <span class="dot active" data-step="1"></span>
+                    <span class="dot" data-step="2"></span>
+                    <span class="dot" data-step="3"></span>
+                    <span class="dot" data-step="4"></span>
+                </div>
+                <button type="button" id="onboardingNext" class="onboarding-next">Next</button>
+            </div>
         </div>
-        <div class="stat-grid" aria-live="polite">
-            <article class="stat-card">
-                <p class="stat-label">Day</p>
-                <p class="stat-value" id="dayDisplay">1</p>
-            </article>
-            <article class="stat-card">
-                <p class="stat-label">Cash on hand</p>
-                <p class="stat-value" id="cashDisplay">$100.00</p>
-            </article>
-            <article class="stat-card">
-                <p class="stat-label">Reputation</p>
-                <p class="stat-value" id="repDisplay">50 · Local Newcomer</p>
-            </article>
-        </div>
-    </header>
+    </div>
 
-    <main class="main-grid">
-        <section class="panel" aria-labelledby="setupTitle">
+    <!-- Debrief Panel -->
+    <div id="debriefPanel" class="debrief-panel hidden">
+        <div class="debrief-content">
+            <h3>What Changed Tonight</h3>
+            
+            <!-- Night Replay Steps -->
+            <div class="replay-steps" id="replaySteps">
+                <div class="replay-step" data-step="1">
+                    <span class="step-icon">🌙</span>
+                    <span class="step-text">Night begins...</span>
+                </div>
+                <div class="replay-step" data-step="2">
+                    <span class="step-icon">📦</span>
+                    <span class="step-text" id="replayCook">Cooking bags...</span>
+                </div>
+                <div class="replay-step" data-step="3">
+                    <span class="step-icon">🚀</span>
+                    <span class="step-text" id="replayDistro">Distributing...</span>
+                </div>
+                <div class="replay-step" data-step="4">
+                    <span class="step-icon">💰</span>
+                    <span class="step-text" id="replaySales">Counting sales...</span>
+                </div>
+            </div>
+            
+            <div class="debrief-deltas">
+                <div class="debrief-delta" id="debriefCash">
+                    <span class="delta-label">Cash</span>
+                    <span class="delta-value"></span>
+                    <span class="delta-reason"></span>
+                </div>
+                <div class="debrief-delta" id="debriefCred">
+                    <span class="delta-label">Cred</span>
+                    <span class="delta-value"></span>
+                    <span class="delta-reason"></span>
+                </div>
+                <div class="debrief-delta" id="debriefHeat">
+                    <span class="delta-label">Heat</span>
+                    <span class="delta-value"></span>
+                    <span class="delta-reason"></span>
+                </div>
+            </div>
+            <button type="button" id="debriefDismiss" class="debrief-dismiss">Continue</button>
+        </div>
+    </div>
+    
+    <!-- Particle Canvas -->
+    <canvas id="particleCanvas" class="particle-canvas"></canvas>
+
+    <!-- Top Navigation -->
+    <nav class="top-nav">
+        <div class="nav-brand">
+            <span class="brand-icon">◈</span>
+            <span class="brand-name">Micro Dose</span>
+        </div>
+        <div class="nav-links">
+            <button class="nav-link active" data-view="night" title="Night Operations">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                </svg>
+                <span class="nav-label">Night</span>
+            </button>
+            <button class="nav-link" data-view="empire" title="Empire View">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+                    <rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+                </svg>
+                <span class="nav-label">Empire</span>
+            </button>
+            <button class="nav-link" data-view="office" title="Back Office">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                </svg>
+                <span class="nav-label">Office</span>
+            </button>
+        </div>
+        <!-- XP Bar (Progression) -->
+        <div class="xp-bar-wrapper" id="xpBarWrapper">
+            <div class="xp-bar">
+                <div class="xp-fill" id="xpFill" style="width: 0%"></div>
+            </div>
+            <span class="xp-label">Lvl <span id="playerLevel">1</span></span>
+        </div>
+    </nav>
+
+    <!-- =====================================================
+         NIGHT SCREEN (Main Game Loop)
+         ===================================================== -->
+    <div id="nightScreen" class="game-screen active">
+        <!-- Top Status Bar -->
+        <header class="top-header">
+            <div class="stat-bar" aria-live="polite">
+                <!-- Compact Day + Cash Stack -->
+                <div class="stat-stack">
+                    <article class="stat-card-mini stat-day">
+                        <span class="stat-label">Day</span>
+                        <span class="stat-value" id="dayDisplay">1</span>
+                        <span class="stat-sublabel" id="actLabel">Act I</span>
+                    </article>
+                    <article class="stat-card-mini stat-cash">
+                        <span class="stat-label">Cash</span>
+                        <span class="stat-value" id="cashDisplay">$750</span>
+                        <span class="stat-trend" id="cashTrend"></span>
+                    </article>
+                </div>
+                <!-- Cred Gauge -->
+                <article class="stat-card stat-gauge" id="credCard">
+                    <div class="gauge-row">
+                        <div class="gauge-container" id="credGauge" role="meter" aria-valuenow="55" aria-valuemin="0" aria-valuemax="120" tabindex="0">
+                            <svg class="gauge-svg" viewBox="0 0 100 60">
+                                <defs>
+                                    <linearGradient id="credGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                        <stop offset="0%" stop-color="#6366f1"/>
+                                        <stop offset="100%" stop-color="#8b5cf6"/>
+                                    </linearGradient>
+                                </defs>
+                                <path class="gauge-bg" d="M 10 55 A 40 40 0 0 1 90 55"/>
+                                <path class="gauge-fill gauge-cred" d="M 10 55 A 40 40 0 0 1 90 55" id="credArc"/>
+                                <circle class="gauge-needle" cx="50" cy="55" r="4" id="credNeedle"/>
+                            </svg>
+                        </div>
+                        <div class="gauge-info">
+                            <span class="gauge-label">Cred</span>
+                            <span class="gauge-value" id="credValue">55</span>
+                            <span class="gauge-tier" id="credTier">Block Captain</span>
+                        </div>
+                    </div>
+                    <div class="tooltip" id="credTooltip">
+                        <strong>Street Cred</strong>
+                        <p>Your reputation. Higher cred = more customers. Build it by selling out and maintaining quality.</p>
+                    </div>
+                </article>
+                <!-- Heat Gauge -->
+                <article class="stat-card stat-gauge" id="heatCard">
+                    <div class="gauge-row">
+                        <div class="gauge-container" id="heatGauge" role="meter" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" tabindex="0">
+                            <svg class="gauge-svg" viewBox="0 0 100 60">
+                                <defs>
+                                    <linearGradient id="heatGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                        <stop offset="0%" stop-color="#fbbf24"/>
+                                        <stop offset="50%" stop-color="#f97316"/>
+                                        <stop offset="100%" stop-color="#ef4444"/>
+                                    </linearGradient>
+                                </defs>
+                                <path class="gauge-bg" d="M 10 55 A 40 40 0 0 1 90 55"/>
+                                <path class="gauge-fill gauge-heat" d="M 10 55 A 40 40 0 0 1 90 55" id="heatArc"/>
+                                <circle class="gauge-needle" cx="50" cy="55" r="4" id="heatNeedle"/>
+                            </svg>
+                        </div>
+                        <div class="gauge-info">
+                            <span class="gauge-label">Heat</span>
+                            <span class="gauge-value" id="heatValue">20</span>
+                            <span class="gauge-tier" id="heatTier">Chill</span>
+                        </div>
+                    </div>
+                    <div class="tooltip" id="heatTooltip">
+                        <strong>Heat Level</strong>
+                        <p>Law enforcement attention. High heat triggers raids. Lay low to cool off.</p>
+                    </div>
+                </article>
+            </div>
+        </header>
+
+        <!-- Main Two-Column Layout -->
+        <main class="main-grid">
+        <!-- Left Column: Orders -->
+        <section class="panel orders-panel" aria-labelledby="ordersTitle">
             <div class="panel-header">
-                <h2 id="setupTitle">Today's Setup</h2>
-                <p id="forecastText" class="forecast-text"></p>
-            </div>
-            <div class="forecast-grid">
-                <article>
-                    <h3>Weather</h3>
-                    <p id="weatherDisplay">Sunny (Comfortable)</p>
-                </article>
-                <article>
-                    <h3>Foot Traffic</h3>
-                    <p id="trafficDisplay">Normal</p>
-                </article>
-                <article>
-                    <h3>Event</h3>
-                    <p id="eventDisplay">None today</p>
-                </article>
+                <h2 id="ordersTitle">Tonight's Orders</h2>
             </div>
 
-            <form id="dayForm" class="day-form">
-                <div class="form-row">
-                    <label for="priceInput">Price per drink ($)</label>
-                    <input type="number" id="priceInput" name="price" min="0" step="0.1" value="3" required />
+            <!-- Block Conditions (Read-only) -->
+            <div class="conditions-section">
+                <h3 class="section-label">Block Conditions</h3>
+                <div class="conditions-grid">
+                    <article class="condition-card">
+                        <div class="condition-icon">🌆</div>
+                        <div class="condition-content">
+                            <h4>Neighborhood Vibe</h4>
+                            <p id="weatherDisplay">Calm</p>
+                            <span class="condition-detail" id="weatherDetail">Locals only, easy to read.</span>
+                        </div>
+                    </article>
+                    <article class="condition-card">
+                        <div class="condition-icon">👥</div>
+                        <div class="condition-content">
+                            <h4>Street Flow</h4>
+                            <p id="trafficDisplay">Steady</p>
+                            <span class="condition-detail" id="trafficDetail">Predictable flow until midnight.</span>
+                        </div>
+                    </article>
+                    <article class="condition-card condition-event" id="eventCard">
+                        <div class="condition-icon">⚡</div>
+                        <div class="condition-content">
+                            <h4>Special Situation</h4>
+                            <p id="eventDisplay">None tonight</p>
+                            <span class="condition-detail" id="eventDetail">Run your plan.</span>
+                        </div>
+                    </article>
                 </div>
-                <div class="form-row">
-                    <label for="unitsInput">Units to prepare</label>
-                    <input type="number" id="unitsInput" name="units" min="0" step="1" value="60" required />
-                    <small class="hint">Each unit costs ingredients upfront.</small>
+            </div>
+
+            <!-- Tonight's Plan Form -->
+            <form id="dayForm" class="plan-form">
+                <h3 class="section-label">Tonight's Plan</h3>
+                
+                <!-- Price + Bags Row (Compact Horizontal) -->
+                <div class="input-row">
+                    <div class="compact-input">
+                        <label for="priceInput">Price</label>
+                        <div class="stepper-inline">
+                            <button type="button" class="step-btn" data-target="priceInput" data-step="-5" aria-label="Decrease price">−</button>
+                            <span class="input-prefix">$</span>
+                            <input type="number" id="priceInput" name="price" min="5" max="250" step="1" value="45" required />
+                            <button type="button" class="step-btn" data-target="priceInput" data-step="5" aria-label="Increase price">+</button>
+                        </div>
+                    </div>
+                    <div class="compact-input">
+                        <label for="unitsInput">Bags</label>
+                        <div class="stepper-inline">
+                            <button type="button" class="step-btn" data-target="unitsInput" data-step="-10" aria-label="Decrease bags">−</button>
+                            <input type="number" id="unitsInput" name="units" min="0" max="600" step="1" value="80" required />
+                            <button type="button" class="step-btn" data-target="unitsInput" data-step="10" aria-label="Increase bags">+</button>
+                        </div>
+                    </div>
+                    <div class="compact-input estimate-inline">
+                        <label>Potential</label>
+                        <div class="estimate-value" id="estimateValue">$2,425</div>
+                        <small class="estimate-detail" id="estimateDetail">if all sell</small>
+                    </div>
                 </div>
-                <fieldset class="form-row">
-                    <legend>Marketing boost</legend>
-                    <div id="marketingOptions" class="marketing-options"></div>
+
+                <!-- Cut Quality Slider (Compact) -->
+                <div class="quality-row">
+                    <label for="purityInput">Quality</label>
+                    <div class="slider-inline">
+                        <input type="range" id="purityInput" name="purity" min="60" max="100" step="5" value="85" />
+                        <span class="quality-badge" id="purityIndicator">Standard 85%</span>
+                    </div>
+                </div>
+
+                <!-- Distribution Lane -->
+                <fieldset class="form-row distribution-fieldset">
+                    <legend>Distribution Lane</legend>
+                    <div id="marketingOptions" class="distribution-grid"></div>
+                    <div class="distribution-summary" id="distributionSummary">
+                        <span class="summary-label">Net take-home if all sold:</span>
+                        <span class="summary-value" id="summaryValue">$0</span>
+                    </div>
                 </fieldset>
+
                 <p class="form-error" id="formError" aria-live="assertive"></p>
-                <button type="submit" id="runDay" class="primary">Run Day</button>
+
+                <!-- Run the Night Button -->
+                <div class="run-night-container">
+                    <button type="submit" id="runDay" class="run-night-btn">
+                        <span class="btn-icon">🌙</span>
+                        <span class="btn-text">Run the Night</span>
+                    </button>
+                </div>
+                <button type="button" id="restartBtn" class="secondary hidden">Restart Game</button>
             </form>
-            <button type="button" id="restartBtn" class="secondary hidden">Restart Game</button>
         </section>
 
-        <section class="panel" aria-labelledby="analyticsTitle">
+        <!-- Right Column: Intel -->
+        <section class="panel intel-panel" aria-labelledby="intelTitle">
             <div class="panel-header">
-                <h2 id="analyticsTitle">Charts &amp; History</h2>
-                <p class="hint">Track profit momentum and spot trends.</p>
+                <h2 id="intelTitle">Crew Intel</h2>
+                <p class="panel-hint">Forecasts, results, and street chatter.</p>
             </div>
-            <div class="chart-wrapper">
-                <canvas id="cashChart" width="640" height="300" aria-label="Cash over time" role="img"></canvas>
+
+            <!-- Market Conditions -->
+            <div class="market-section" id="marketContainer">
+                <div class="market-info">
+                    <div class="market-price">
+                        <span class="label">Street Price</span>
+                        <span class="value">$45</span>
+                    </div>
+                    <div class="market-supply">
+                        <span class="label">Supply</span>
+                        <span class="value">Normal</span>
+                    </div>
+                    <div class="market-trend">
+                        <span class="label">Demand</span>
+                        <span class="value">→</span>
+                    </div>
+                </div>
             </div>
-            <div class="history-table-wrapper">
-                <table>
-                    <caption>Recent Days</caption>
-                    <thead>
-                        <tr>
-                            <th scope="col">Day</th>
-                            <th scope="col">Price</th>
-                            <th scope="col">Prepared</th>
-                            <th scope="col">Sold</th>
-                            <th scope="col">Profit</th>
-                        </tr>
-                    </thead>
-                    <tbody id="historyBody"></tbody>
-                </table>
+
+            <!-- Tonight's Forecast -->
+            <div class="forecast-section">
+                <h3 class="section-label">Tonight's Forecast</h3>
+                <p class="forecast-text" id="forecastText">Reading the block...</p>
+                <div class="forecast-chips" id="forecastChips">
+                    <!-- Chips populated by JS -->
+                </div>
+                <div class="forecast-rumor" id="forecastRumor">
+                    <span class="rumor-icon">💬</span>
+                    <span class="rumor-text">Quiet chatter—run your plan.</span>
+                </div>
+            </div>
+
+            <!-- Result Feed -->
+            <div class="result-section">
+                <h3 class="section-label">Nightly Report</h3>
+                <div id="logFeed" class="log-feed" aria-live="polite">
+                    <div class="log-empty">Run your first night to see results here.</div>
+                </div>
+            </div>
+
+            <!-- Recent Runs Table -->
+            <div class="history-section">
+                <h3 class="section-label">Recent Runs</h3>
+                <div class="history-table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th scope="col">Night</th>
+                                <th scope="col">Price</th>
+                                <th scope="col">Sold</th>
+                                <th scope="col">Profit</th>
+                                <th scope="col">Trend</th>
+                            </tr>
+                        </thead>
+                        <tbody id="historyBody">
+                            <tr class="empty-row">
+                                <td colspan="5">No runs yet</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Cash Chart -->
+            <div class="chart-section">
+                <h3 class="section-label">Cash Flow</h3>
+                <div class="chart-wrapper">
+                    <canvas id="cashChart" width="640" height="200" aria-label="Cash over time" role="img"></canvas>
+                </div>
+            </div>
+
+            <!-- Active Challenges -->
+            <div class="challenges-section">
+                <h3 class="section-label">Active Challenges</h3>
+                <div id="challengesContainer">
+                    <p class="no-challenges">Loading challenges...</p>
+                </div>
+            </div>
+
+            <!-- Rival Operations -->
+            <div class="rivals-section">
+                <h3 class="section-label">Rival Operations</h3>
+                <div id="rivalsContainer">
+                    <p class="no-rivals">No active rivals</p>
+                </div>
             </div>
         </section>
-    </main>
+        </main>
+    </div><!-- /nightScreen -->
 
-    <section class="panel log-panel" aria-labelledby="logTitle">
-        <div class="panel-header">
-            <h2 id="logTitle">Event Log</h2>
-            <p class="hint">Every hustle, surprise inspection, and lucky break.</p>
+    <!-- =====================================================
+         EMPIRE SCREEN (Territory & Assets)
+         ===================================================== -->
+    <div id="empireScreen" class="game-screen">
+        <header class="screen-header">
+            <h1>Empire View</h1>
+            <p class="screen-hint">Expand your territory and upgrade your operation.</p>
+        </header>
+
+        <div class="empire-layout">
+            <!-- Territories Section -->
+            <section class="panel empire-territories-panel">
+                <div class="panel-header">
+                    <h2>Territories</h2>
+                    <p class="panel-hint">Control more blocks to increase your reach.</p>
+                </div>
+                <div class="territories-grid" id="territoriesGrid">
+                    <!-- Populated by JS -->
+                </div>
+                <div class="territory-summary" id="territorySummary">
+                    <span class="summary-label">Total Passive Income:</span>
+                    <span class="summary-value" id="territoryIncomeValue">$0/day</span>
+                </div>
+            </section>
+
+            <!-- Assets Section -->
+            <section class="panel empire-assets-panel">
+                <div class="panel-header">
+                    <h2>Assets</h2>
+                    <p class="panel-hint">Upgrade your infrastructure for better margins.</p>
+                </div>
+                <div class="assets-grid" id="assetsGrid">
+                    <!-- Populated by JS -->
+                </div>
+            </section>
+
+            <!-- Crew Section -->
+            <section class="panel empire-crew-panel">
+                <div class="panel-header">
+                    <h2>Crew</h2>
+                    <p class="panel-hint">Hire specialists to boost your operation.</p>
+                </div>
+                <div class="crew-grid" id="crewGrid">
+                    <!-- Populated by JS -->
+                </div>
+            </section>
         </div>
-        <div id="logFeed" class="log-feed" aria-live="polite"></div>
-    </section>
+    </div><!-- /empireScreen -->
+
+    <!-- =====================================================
+         OFFICE SCREEN (Finances & Upgrades)
+         ===================================================== -->
+    <div id="officeScreen" class="game-screen">
+        <header class="screen-header">
+            <h1>Back Office</h1>
+            <p class="screen-hint">Manage your finances, investments, and upgrades.</p>
+        </header>
+
+        <div class="office-layout">
+            <!-- Stats Dashboard -->
+            <section class="panel office-stats-panel">
+                <div class="panel-header">
+                    <h2>Lifetime Stats</h2>
+                </div>
+                <div class="stats-grid" id="officeStatsGrid">
+                    <div class="stat-block">
+                        <span class="stat-block-label">Total Earned</span>
+                        <span class="stat-block-value" id="statTotalEarned">$0</span>
+                    </div>
+                    <div class="stat-block">
+                        <span class="stat-block-label">Total Spent</span>
+                        <span class="stat-block-value" id="statTotalSpent">$0</span>
+                    </div>
+                    <div class="stat-block">
+                        <span class="stat-block-label">Days Active</span>
+                        <span class="stat-block-value" id="statDaysActive">0</span>
+                    </div>
+                    <div class="stat-block">
+                        <span class="stat-block-label">Best Night</span>
+                        <span class="stat-block-value" id="statBestNight">$0</span>
+                    </div>
+                    <div class="stat-block">
+                        <span class="stat-block-label">Avg Profit</span>
+                        <span class="stat-block-value" id="statAvgProfit">$0</span>
+                    </div>
+                    <div class="stat-block">
+                        <span class="stat-block-label">Win Rate</span>
+                        <span class="stat-block-value" id="statWinRate">0%</span>
+                    </div>
+                    <div class="stat-block">
+                        <span class="stat-block-label">Bags Sold</span>
+                        <span class="stat-block-value" id="statBagsSold">0</span>
+                    </div>
+                    <div class="stat-block">
+                        <span class="stat-block-label">Net Worth</span>
+                        <span class="stat-block-value" id="statNetWorth">$0</span>
+                    </div>
+                </div>
+                
+                <!-- Performance Chart -->
+                <div class="performance-section">
+                    <h3 class="section-label">Performance Trends</h3>
+                    <div class="mini-charts">
+                        <div class="mini-chart">
+                            <span class="mini-chart-label">Profit Trend</span>
+                            <span class="mini-chart-sparkline" id="profitSparkline">▁▂▃▄▅▆▇█</span>
+                        </div>
+                        <div class="mini-chart">
+                            <span class="mini-chart-label">Cred Trend</span>
+                            <span class="mini-chart-sparkline" id="credSparkline">▅▆▇█▇▆▅▄</span>
+                        </div>
+                        <div class="mini-chart">
+                            <span class="mini-chart-label">Heat Trend</span>
+                            <span class="mini-chart-sparkline" id="heatSparkline">▂▃▄▃▂▁▂▃</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Current Streak -->
+                <div class="streak-display" id="streakDisplay">
+                    <span class="streak-icon">🔥</span>
+                    <span class="streak-text">0 night profit streak</span>
+                </div>
+            </section>
+
+            <!-- Ledger Section -->
+            <section class="panel office-ledger-panel">
+                <div class="panel-header">
+                    <h2>Transaction Ledger</h2>
+                    <div class="ledger-filters">
+                        <button class="filter-btn active" data-filter="all">All</button>
+                        <button class="filter-btn" data-filter="income">Income</button>
+                        <button class="filter-btn" data-filter="expense">Expenses</button>
+                    </div>
+                </div>
+                <div class="ledger-table-wrapper">
+                    <table class="ledger-table">
+                        <thead>
+                            <tr>
+                                <th>Day</th>
+                                <th>Type</th>
+                                <th>Description</th>
+                                <th>Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ledgerBody">
+                            <tr class="empty-row">
+                                <td colspan="4">No transactions yet</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Investments Section -->
+            <section class="panel office-investments-panel">
+                <div class="panel-header">
+                    <h2>Investments</h2>
+                    <p class="panel-hint">Launder money and earn passive returns.</p>
+                </div>
+                <div class="investments-grid" id="investmentsGrid">
+                    <!-- Populated by JS -->
+                </div>
+            </section>
+
+            <!-- Upgrades Section -->
+            <section class="panel office-upgrades-panel">
+                <div class="panel-header">
+                    <h2>Upgrades</h2>
+                    <p class="panel-hint">One-time purchases that improve your odds.</p>
+                </div>
+                <div class="upgrades-grid" id="upgradesGrid">
+                    <!-- Populated by JS -->
+                </div>
+            </section>
+
+            <!-- Achievements Section -->
+            <section class="panel office-achievements-panel">
+                <div class="panel-header">
+                    <h2>Achievements</h2>
+                    <span class="achievement-count" id="achievementCount">0/12</span>
+                </div>
+                <div class="achievements-grid" id="achievementsGrid">
+                    <!-- Populated by JS -->
+                </div>
+            </section>
+
+            <!-- Prestige Section -->
+            <section class="panel office-prestige-panel" id="prestigePanel">
+                <div class="panel-header">
+                    <h2>Prestige</h2>
+                    <span class="prestige-level" id="prestigeLevel">Lvl 0</span>
+                </div>
+                <div class="prestige-info">
+                    <p class="prestige-desc">Reset your progress but keep permanent bonuses. Requires Day 30+ and $50k+.</p>
+                    <div class="prestige-stats">
+                        <div class="prestige-stat">
+                            <span class="label">Available Points</span>
+                            <span class="value" id="prestigePoints">0</span>
+                        </div>
+                        <div class="prestige-stat">
+                            <span class="label">Points on Prestige</span>
+                            <span class="value" id="prestigePreview">0</span>
+                        </div>
+                    </div>
+                    <button id="prestigeBtn" class="prestige-btn" onclick="prestige()" disabled>
+                        Prestige Now
+                    </button>
+                </div>
+                <div class="prestige-bonuses">
+                    <h4>Permanent Bonuses</h4>
+                    <div class="bonus-grid" id="bonusGrid">
+                        <div class="bonus-item">
+                            <span class="bonus-name">Starting Cash</span>
+                            <span class="bonus-value" id="bonusStartCash">+$0</span>
+                        </div>
+                        <div class="bonus-item">
+                            <span class="bonus-name">Demand Boost</span>
+                            <span class="bonus-value" id="bonusDemand">+0%</span>
+                        </div>
+                        <div class="bonus-item">
+                            <span class="bonus-name">Heat Reduction</span>
+                            <span class="bonus-value" id="bonusHeat">-0%</span>
+                        </div>
+                        <div class="bonus-item">
+                            <span class="bonus-name">XP Multiplier</span>
+                            <span class="bonus-value" id="bonusXP">×1.0</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Keyboard Shortcuts -->
+            <div class="keyboard-hints">
+                <h4>Keyboard Shortcuts</h4>
+                <div class="hint-grid">
+                    <span class="hint"><kbd>1</kbd> Night</span>
+                    <span class="hint"><kbd>2</kbd> Empire</span>
+                    <span class="hint"><kbd>3</kbd> Office</span>
+                    <span class="hint"><kbd>Enter</kbd> Run Night</span>
+                    <span class="hint"><kbd>Ctrl+S</kbd> Save</span>
+                    <span class="hint"><kbd>Esc</kbd> Close</span>
+                </div>
+            </div>
+        </div>
+    </div><!-- /officeScreen -->
+
+    <!-- Unlock Toast -->
+    <div id="unlockToast" class="unlock-toast hidden">
+        <div class="toast-icon">🎉</div>
+        <div class="toast-content">
+            <strong class="toast-title">Unlocked!</strong>
+            <span class="toast-message" id="toastMessage"></span>
+        </div>
+    </div>
 
     <script type="module" id="gameModule" src="/games/micro-dose/game.js" data-local="game.js"></script>
     <script>
@@ -123,5 +678,6 @@
             }
         }
     </script>
-</body>
+    <script src="/games/shared/save-state.js"></script>
+  </body>
 </html>

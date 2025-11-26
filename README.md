@@ -1,115 +1,65 @@
-# Street Stand Simulator
+# Micro Dose Syndicate
 
-A micro-tycoon game where you run a scrappy city stand, set prices, manage inventory, and navigate daily challenges.
+Modern neon UI meets the cult-classic 90s "drug dealer" sim. Run a clandestine micro-dose lab, read street intel, tune your purity, and grow an empire without letting the Task Force or bankruptcy crush your timeline.
 
-## About
+## Overview
 
-You've inherited a tiny permit and a folding table. Each day brings new weather, foot traffic, and events. Price your goods wisely, prep enough stock, and maintain your reputation to survive in the competitive street economy.
+- **Theme** – neon-soaked, UX-forward take on the calculator-era classic
+- **Loop** – scan intel → choose price/purity/cook count/distribution → run the night → parse the Street Wire
+- **Goal** – stack cash while balancing cred growth and rising heat
 
-## Features
+## Core Systems
 
-- Day-by-day business simulation
-- Dynamic pricing system
-- Weather and event impacts
-- Reputation tracking
-- Marketing boost options
-- Cash flow trend charting
-- Historical performance tracking
-- Random events (inspectors, festivals, competitors)
+- **Cred**: social proof of your synthwork. Clean cuts and sell-outs raise it, greed drops it, and higher cred multiplies demand.
+- **Heat**: vice attention. High-risk distribution, premium purity, or special events spike it. If it reaches 100, the Task Force busts you.
+- **Purity slider**: stretch product down to 60% or go 100% luxury. Changes demand, per-unit cost, and heat gains.
+- **Distribution lanes**: solo corners, bike runners, club residencies, or ghost lockers—each alters upfront costs, reach, and heat.
+- **Intel grid**: nightly vibe, flow, and special events (underground raves, vice sweeps, influencer drops) that reshape demand or heat.
 
 ## How to Play
 
-1. Open `index.html` in a browser
-2. Each day:
-   - Review weather forecast and expected foot traffic
-   - Set your price per drink/item
-   - Choose how many units to prepare (costs ingredients upfront)
-   - Optionally purchase marketing boosts
-   - Click "Run Day" to see results
-3. Track your cash, reputation, and profit trends
-4. Survive as long as possible or reach a cash goal
+1. Serve the folder with `python3 -m http.server 4173` (or any static host) and open `http://localhost:4173/index.html`.
+2. Review the intel grid for vibe/flow plus any active event.
+3. Set your bag price, how many to cook, desired purity, and distribution lane.
+4. Hit **Run Night** and watch the charts/logs update.
+5. Track cash, cred, heat, and nightly breakdowns in the **Crew Intel** panel.
+6. Pivot between growth and stealth before cash hits zero or heat hits 100.
 
-## Game Mechanics
+## Failure States
 
-### Pricing Strategy
-
-- Higher prices = more profit per sale, but fewer customers
-- Lower prices = more volume, but thinner margins
-- Optimal price varies by weather, traffic, and reputation
-
-### Inventory Management
-
-- Prepare units before each day
-- Unsold units may spoil (depending on game mode)
-- Running out of stock means lost sales
-- Overproducing wastes money
-
-### Reputation System
-
-- Starts at 50 (Local Newcomer)
-- Increases with fair prices and good service
-- Decreases with price gouging or poor quality
-- Higher reputation attracts more customers
-
-### Weather Effects
-
-- **Sunny**: Normal demand, stable traffic
-- **Hot**: Increased demand for cold drinks
-- **Rain**: Reduced foot traffic
-- **Cold**: Lower demand, fewer browsers
-
-### Random Events
-
-- City inspector visits (may fine you or approve your operation)
-- Local festivals (boost traffic)
-- Competitor opens nearby (splits customers)
-- Supply shortages (increase ingredient costs)
+- **Crew Broke**: cash balance dips below zero.
+- **Task Force Bust**: heat reaches 100, triggering a raid.
 
 ## Controls
 
-- **Price Input**: Set your selling price
-- **Units Input**: Choose production quantity
-- **Marketing Options**: Purchase advertising boosts
-- **Run Day Button**: Execute the day's operations
-- **Restart Button**: Start a new game (after game over)
+- **Price per bag** – recommended $60–$160; whales pay more but raise heat.
+- **Bags to cook** – total product prepped for the night (unsold bags become leftovers).
+- **Cut quality** – range input from 60–100% purity.
+- **Distribution lane** – radio options for each strategy with reach/heat summaries.
+- **Run Night / Restart Game** – simulate or reset the timeline.
 
-## Victory/Loss
+## Tech Notes
 
-- **Success**: Build up significant cash reserves and reputation
-- **Failure**: Run out of money or lose all reputation
+- Vanilla HTML, CSS, and JavaScript—no build tooling.
+- HTML5 Canvas chart for the cash timeline.
+- Responsive CSS grid plus glass/neon styling.
+- Works offline once the page and assets are cached.
 
-## Technical Details
-
-- Vanilla JavaScript (no dependencies)
-- HTML5 Canvas for profit trend chart
-- CSS Grid layout
-- Responsive design
-- Works offline after initial load
-
-## Browser Compatibility
-
-- Chrome/Edge 90+
-- Firefox 88+
-- Safari 14+
-
-## File Structure
+## Structure
 
 ```
 micro-dose/
-├── index.html    # Main game page
-├── game.js       # Game logic and simulation
-├── styles.css    # Styling
+├── index.html    # Markup + layout
+├── styles.css    # Neon/glass visual theme
+├── game.js       # State machine + sim logic
 └── README.md     # This file
 ```
 
-## Tips
+## Quick Tips
 
-- Study the weather forecast and adjust pricing
-- Don't overproduce on slow traffic days
-- Invest in marketing during festivals
-- Keep prices fair to build reputation
-- Watch your cash flow chart for trends
+- Ghost lockers and club residencies spike reach but pump heat—sprinkle low-profile nights between big pushes.
+- Purity above 90% wins cred but costs more and draws attention.
+- Solo runs with low inventory bleed off heat if you're in danger of a bust.
+- Watch the cash chart slope; sustained dips mean you should drop price or batches immediately.
 
-## Credits
-
-Created by Luke Steuber
+Have fun rewriting playground legend history.
