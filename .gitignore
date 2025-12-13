@@ -1,0 +1,30 @@
+# Environment
+.env
+.env.*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# Backup files
+*.bak
+
+# AI Development Tools (do not publish)
+CLAUDE.md
+AGENTS.md
+.claude/
+.cursor/
+.gemini/
+*.mdc
+
+# Project artifacts (not for publication)
+projects-analysis-report.md
+setup_game_repos.sh
+setup_remaining_repos.sh
