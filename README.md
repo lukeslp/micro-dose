@@ -1,5 +1,9 @@
 # Micro Dose Syndicate
 
+[![Live Demo](https://img.shields.io/badge/demo-live-brightgreen)](https://dr.eamer.dev/games/micro-dose/)
+
+![Micro Dose Syndicate](https://raw.githubusercontent.com/lukeslp/micro-dose/main/screenshot.png)
+
 Modern neon UI meets the cult-classic 90s "drug dealer" sim. Run a clandestine micro-dose lab, read street intel, tune your purity, and grow an empire without letting the Task Force or bankruptcy crush your timeline.
 
 ## Overview
