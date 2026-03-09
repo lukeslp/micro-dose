@@ -1,0 +1,29 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(for dir in /home/coolhand/html/games/*/)",
+      "Bash(xargs:*)",
+      "Bash(for game in cube geoguess hexsweeper micro-colony micro-crawl micro-mystery moria nonograms northern-path sandiego stagehand star-trek wumpus)",
+      "Bash(gh repo list:*)",
+      "Bash(cat:*)",
+      "Bash(git pull:*)",
+      "Bash(for repo in geoguess micro-colony micro-crawl micro-mystery moria nonograms northern-path sandiego stagehand wumpus)",
+      "Bash(for repo in wumpus sandiego nonograms micro-crawl micro-colony micro-mystery moria northern-path geoguess stagehand)",
+      "Bash(gh repo edit:*)",
+      "Bash(for dir in immigrant-game immigration-game inbox ocean_voyage rubics the_deep windy-webcam)",
+      "Bash(if [ -d \"/home/coolhand/html/games/$dir/.git\" ])",
+      "Bash(then)",
+      "Bash(echo:*)",
+      "Bash(else)",
+      "Bash(fi)",
+      "Bash(git init:*)",
+      "Bash(for game in micro-colony micro-crawl micro-mystery stagehand)",
+      "WebSearch",
+      "Bash(gh repo rename:*)",
+      "Bash(curl:*)",
+      "Bash(git rm:*)"
+    ]
+  }
+}
