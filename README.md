@@ -15,7 +15,7 @@ Modern neon UI meets the cult-classic 90s "drug dealer" sim. Run a clandestine m
 - **Cred**: social proof of your synthwork. Clean cuts and sell-outs raise it, greed drops it, and higher cred multiplies demand.
 - **Heat**: vice attention. High-risk distribution, premium purity, or special events spike it. If it reaches 100, the Task Force busts you.
 - **Purity slider**: stretch product down to 60% or go 100% luxury. Changes demand, per-unit cost, and heat gains.
-- **Distribution lanes**: solo corners, bike runners, club residencies, or ghost lockers—each alters upfront costs, reach, and heat.
+- **Distribution lanes**: solo corners, bike runners, club residencies, or ghost lockers. Each alters upfront costs, reach, and heat.
 - **Intel grid**: nightly vibe, flow, and special events (underground raves, vice sweeps, influencer drops) that reshape demand or heat.
 
 ## How to Play
@@ -42,7 +42,7 @@ Modern neon UI meets the cult-classic 90s "drug dealer" sim. Run a clandestine m
 
 ## Tech Notes
 
-- Vanilla HTML, CSS, and JavaScript—no build tooling.
+- Vanilla HTML, CSS, and JavaScript. No build tooling.
 - HTML5 Canvas chart for the cash timeline.
 - Responsive CSS grid plus glass/neon styling.
 - Works offline once the page and assets are cached.
@@ -59,7 +59,7 @@ micro-dose/
 
 ## Quick Tips
 
-- Ghost lockers and club residencies spike reach but pump heat—sprinkle low-profile nights between big pushes.
+- Ghost lockers and club residencies spike reach but pump heat. Sprinkle low-profile nights between big pushes.
 - Purity above 90% wins cred but costs more and draws attention.
 - Solo runs with low inventory bleed off heat if you're in danger of a bust.
 - Watch the cash chart slope; sustained dips mean you should drop price or batches immediately.
