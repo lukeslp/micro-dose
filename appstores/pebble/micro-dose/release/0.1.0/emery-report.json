@@ -1,0 +1,49 @@
+{
+  "platform": "emery",
+  "sdk": "4.33.1",
+  "pbwSHA256": "1d394d0b291e9a11520d6c363fa5074fbd13fd44c98bc0ed855bb028a7e86fcc",
+  "passed": true,
+  "checks": [
+    "launch",
+    "help",
+    "edit plan",
+    "run night and report",
+    "save and relaunch",
+    "touch edit",
+    "cancel purchase",
+    "cancel reset"
+  ],
+  "frames": [
+    "build/evidence/emery-help.png",
+    "build/evidence/emery-map.png",
+    "build/evidence/emery-edit.png",
+    "build/evidence/emery-report.png",
+    "build/evidence/emery-purchase.png",
+    "build/evidence/emery-pause.png",
+    "build/evidence/emery-confirm.png"
+  ],
+  "logs": [
+    "MD screen=2 choice=0 day=1 cash=750 heat=20 over=0",
+    "MD screen=0 choice=0 day=1 cash=750 heat=20 over=0",
+    "MD screen=4 choice=0 day=1 cash=750 heat=20 over=0",
+    "MD screen=4 choice=0 day=1 cash=750 heat=20 over=0",
+    "MD screen=0 choice=0 day=1 cash=750 heat=20 over=0",
+    "MD screen=0 choice=6 day=1 cash=750 heat=20 over=0",
+    "MD screen=5 choice=6 day=2 cash=2157 heat=19 over=0",
+    "MD screen=0 choice=6 day=2 cash=2157 heat=19 over=0",
+    "Heap Usage for App <Micro Dose: Total Size <121696B> Used <308B> Still allocated <0B>",
+    "MD screen=0 choice=0 day=2 cash=2157 heat=19 over=0",
+    "MD screen=0 choice=1 day=2 cash=2157 heat=19 over=0",
+    "MD screen=0 choice=2 day=2 cash=2157 heat=19 over=0",
+    "MD screen=0 choice=3 day=2 cash=2157 heat=19 over=0",
+    "MD screen=0 choice=4 day=2 cash=2157 heat=19 over=0",
+    "MD screen=4 choice=4 day=2 cash=2157 heat=19 over=0",
+    "MD screen=6 choice=4 day=2 cash=2157 heat=19 over=0",
+    "MD screen=0 choice=4 day=2 cash=2157 heat=19 over=0",
+    "MD screen=1 choice=4 day=2 cash=2157 heat=19 over=0",
+    "MD screen=1 choice=4 day=2 cash=2157 heat=19 over=0",
+    "MD screen=1 choice=4 day=2 cash=2157 heat=19 over=0",
+    "MD screen=3 choice=4 day=2 cash=2157 heat=19 over=0",
+    "MD screen=0 choice=4 day=2 cash=2157 heat=19 over=0"
+  ]
+}

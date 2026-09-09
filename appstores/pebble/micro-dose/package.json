@@ -1,0 +1,24 @@
+{
+  "name": "micro-dose",
+  "version": "0.1.0",
+  "author": "Luke Steuber",
+  "private": true,
+  "dependencies": {},
+  "pebble": {
+    "displayName": "Micro Dose",
+    "uuid": "019023c6-f7ee-470b-bd83-83a849974d80",
+    "sdkVersion": "3",
+    "enableMultiJS": false,
+    "targetPlatforms": [
+      "emery",
+      "gabbro"
+    ],
+    "watchapp": {
+      "watchface": false
+    },
+    "messageKeys": [],
+    "resources": {
+      "media": []
+    }
+  }
+}
