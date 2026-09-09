@@ -25,5 +25,12 @@
       "primaryGIF": "https://developer.repebble.com/api/assets/screenshots/0e8d7ac981644076ac833e25/gabbro/23df3eea-be9b-4f64-986c-1094beaa740d.gif"
     }
   },
-  "verification": "Reopened both saved media panels; primary GIF URLs, five screenshots, banners, and draft/visibility states verified."
+  "verification": "Reopened both saved media panels; primary GIF URLs, five screenshots, banners, and draft/visibility states verified.",
+  "copyRevision": {
+    "verifiedAt": "2026-09-09T20:08:31.317Z",
+    "description": "Saved and reopened",
+    "releaseNotes": "The dashboard now has a city skyline, a larger cash display, and labeled credibility and heat meters. An outline and accent mark the setting you have selected.",
+    "visibility": "Unlisted",
+    "releaseState": "Draft"
+  }
 }

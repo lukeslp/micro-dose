@@ -5,7 +5,7 @@
   "root": "/Users/luke/workspace/micro-dose/appstores/pebble/micro-dose",
   "pbw": "/Users/luke/workspace/micro-dose/appstores/pebble/micro-dose/release/0.2.0/micro-dose-0.2.0.pbw",
   "pbwSHA256": "21e12922de30bc456850250fcf37b6f14e13ca5028caef61a35c55d023d978a5",
-  "description": "A fictional calculator-era underworld economy. Set price, quantity, quality and distribution, then run the night and read the results. Buy districts and fronts, grow cash and credibility, and keep heat below 100. Up and Down browse; Select edits. Every night is a tradeoff. Includes the core economy, districts and fronts; crew and rival systems are outside this watch edition.\n\nFor Pebble Time 2 and Round 2. Touch requires firmware 4.33.2; button controls remain available. By Luke Steuber.",
+  "description": "Run a fictional underworld business, one night at a time. Set your price, quantity, quality and distribution, then see what the night brings. Buy districts and fronts as your cash and credibility grow. Keep an eye on the heat: 100 ends your run.\n\nUp and Down browse your plan; Select opens a setting to edit. This watch edition keeps the calculator-era economy, districts and fronts. Crew and rival systems belong to the larger game.\n\nFor Pebble Time 2 and Pebble Round 2. Touch controls require firmware 4.33.2 or later. Every action also works with buttons.\n\nBy Luke Steuber.",
   "category": "Games",
   "visibility": "Unlisted",
   "releaseState": "Draft",
@@ -24,5 +24,6 @@
     "release/0.2.0/gabbro-map.png": "08537310d3dd508df90af26e55fe6cb1405da531b9a7a2afcf064e4d444c65d1",
     "release/0.2.0/gabbro-edit.png": "fc2b7ea37db42be06927fbf91d4a9feb295f7b1bd44354bbc458ae7c3511b2f6",
     "release/0.2.0/gabbro-report.png": "e1732329bb81cb225ba8fcb6948f5a220dc73521bb844c68306d59947cc3cb39"
-  }
+  },
+  "releaseNotes": "The dashboard now has a city skyline, a larger cash display, and labeled credibility and heat meters. An outline and accent mark the setting you have selected."
 }
