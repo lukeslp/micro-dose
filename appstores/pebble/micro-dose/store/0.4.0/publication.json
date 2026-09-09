@@ -1,0 +1,28 @@
+{
+  "name": "Micro Dose",
+  "version": "0.4.0",
+  "pbwSHA256": "cdcf8252c52f35c7cb966e6ccc3d60933386e700cfe0bc02c1732bc930a8b24e",
+  "targets": [
+    "emery",
+    "gabbro"
+  ],
+  "appId": "0e8d7ac981644076ac833e25",
+  "visibility": "Unlisted",
+  "releaseState": "Draft",
+  "verifiedAt": "2026-09-09T22:47:31.302998+00:00",
+  "dashboardURL": "https://developer.repebble.com/dashboard/apps/0e8d7ac981644076ac833e25/edit",
+  "physicalValidation": "Not performed",
+  "verification": "Saved release and listing; reopened both target panels and verified five screenshots with GIF first. Local GIF frames match native capture pixels.",
+  "media": {
+    "emery": {
+      "screenshots": 5,
+      "banner": 1,
+      "primaryGIF": "https://developer.repebble.com/api/assets/screenshots/0e8d7ac981644076ac833e25/emery/abd0964e-24a5-4dd6-9311-5571522bc3cb.gif"
+    },
+    "gabbro": {
+      "screenshots": 5,
+      "banner": 1,
+      "primaryGIF": "https://developer.repebble.com/api/assets/screenshots/0e8d7ac981644076ac833e25/gabbro/09bf9c45-8633-4075-a051-6e3f85ef7522.gif"
+    }
+  }
+}

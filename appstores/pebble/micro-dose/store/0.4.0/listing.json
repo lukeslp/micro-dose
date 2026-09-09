@@ -1,0 +1,34 @@
+{
+  "name": "Micro Dose",
+  "slug": "micro-dose",
+  "version": "0.4.0",
+  "root": "/Users/luke/workspace/micro-dose/appstores/pebble/micro-dose",
+  "pbw": "/Users/luke/workspace/micro-dose/appstores/pebble/micro-dose/release/0.4.0/micro-dose-0.4.0.pbw",
+  "pbwSHA256": "cdcf8252c52f35c7cb966e6ccc3d60933386e700cfe0bc02c1732bc930a8b24e",
+  "description": "A fictional calculator-era underworld economy. Read the night\u2019s forecast, set price, quantity, quality and distribution, then run the night and see what happened. Illustrated reports follow the results.\n\nClimb six career levels from Runner to Empire. Earn profits, buy districts and fronts, and unlock new distribution routes. Career shows your next unfinished goal. Lay low reduces heat while your fronts still bring in income.\n\nBuild the Empire by earning $60,000 net, owning all six districts and three fronts, and keeping heat below 60. You can keep playing afterward. Negative cash or heat at 100 ends the campaign. Up and Down browse; Select edits or acts. Progress saves automatically. No account or connection required.\n\nFor Pebble Time 2 and Round 2. Touch requires firmware 4.33.2; button controls remain available. By Luke Steuber.",
+  "category": "Games",
+  "visibility": "Unlisted",
+  "releaseState": "Draft",
+  "media": "/Users/luke/workspace/micro-dose/appstores/pebble/micro-dose/store/0.4.0",
+  "primary": "01-gameplay.gif",
+  "targets": [
+    "emery",
+    "gabbro"
+  ],
+  "physicalValidation": "Not performed",
+  "gifStyle": "Sequence of unchanged native gameplay captures, 1300 ms per frame",
+  "nativeSources": {
+    "release/0.4.0/emery-map.png": "d650a8604f7a176391c3f846cfd5fa7cfff67c1abb62634ed6dddc33a582ea91",
+    "release/0.4.0/emery-report.png": "577a48f8a018adf075d495eb80ef3f73560c589e4c1298795207c0f92ddb63f6",
+    "release/0.4.0/emery-promotion-3.png": "b7ddbfe8ab6190825782f3df518521ec7d9ac60fdcfa1414adf09d9ea3295aa6",
+    "release/0.4.0/emery-promotion-5.png": "0727fb2afc2c9e516df72d36814f9ae1bf14a4b98e946cb0a0d4cfba57e4fdc1",
+    "release/0.4.0/emery-promotion-6.png": "d8d997b7aabb58cdeb471a1d4ab43a14c2a6ad9498b43ff20282277df2bba39a",
+    "release/0.4.0/emery-empire-career.png": "91383793766a2cd0e1f86d8ee3ea0835c618d78d83796c724e0bbaabd9fc999c",
+    "release/0.4.0/gabbro-map.png": "f7e6d2ac1a4d39b52c38ab619b0a347893db179645322688c14133bc4a9901a3",
+    "release/0.4.0/gabbro-report.png": "75a034068980499fbc7c94bcc8970f77ad3190549b992bc1de75a49e754c49b3",
+    "release/0.4.0/gabbro-promotion-3.png": "cb37ff9e4dbcad75bb9a10ddeb982819e35ad49426cfc4c2227d9f6ab74cdb5a",
+    "release/0.4.0/gabbro-promotion-5.png": "029aa8820b21dd9fa8b2a7ebb3f3eea3ecf42d9680ebe362f5c5bf61690f8f95",
+    "release/0.4.0/gabbro-promotion-6.png": "df1d4fbcbff10ad85835d7fd7292bc1b4bb41ccb084306a3aca9b61cecdd414d",
+    "release/0.4.0/gabbro-empire-career.png": "3cbd206f17631bd115314c5c7a3913a16be084016469530c9ff6edbfea7b76fa"
+  }
+}
