@@ -11,11 +11,13 @@ name, version = meta["name"], meta["version"]
 pbw = root / "build" / (name + ".pbw")
 digest = hashlib.sha256(pbw.read_bytes()).hexdigest()
 reports = []
-for platform in meta["pebble"]["targetPlatforms"]:
-    report = json.loads((root / "build/evidence" / (platform + "-report.json")).read_text())
-    if not report.get("passed") or report["pbwSHA256"] != digest:
-        raise SystemExit("Missing passing evidence for exact PBW: " + platform)
-    reports.append(report)
+for suite in ("evidence", "campaign-evidence"):
+    for platform in meta["pebble"]["targetPlatforms"]:
+        report_path = root / "build" / suite / (platform + "-report.json")
+        report = json.loads(report_path.read_text())
+        if not report.get("passed") or report["pbwSHA256"] != digest or report['platform'] != platform:
+            raise SystemExit("Missing passing evidence for exact PBW: " + platform + " " + suite)
+        reports.append((suite, report_path, report))
 out = root / "release" / version
 if out.exists():
     raise SystemExit("Release already exists; use a new version")
@@ -27,9 +29,9 @@ with zipfile.ZipFile(out / (name + "-" + version + "-source.zip"), "w", zipfile.
         rel = path.relative_to(root)
         if path.is_file() and (rel.parts[0] in ("src", "test", "tools", "resources") or str(rel) in ("package.json", "wscript", "README.md", ".gitignore")) and "__pycache__" not in rel.parts:
             archive.write(path, name + "/" + str(rel))
-for report in reports:
+for suite, report_path, report in reports:
     platform = report["platform"]
-    shutil.copy2(root / "build/evidence" / (platform + "-report.json"), out / (platform + "-report.json"))
+    shutil.copy2(report_path, out / (suite + "-" + platform + "-report.json"))
     for frame in report["frames"]:
         shutil.copy2(root / frame, out / Path(frame).name)
 (out / "manifest.json").write_text(json.dumps({"name":name,"version":version,"uuid":meta["pebble"]["uuid"],"pbwSHA256":digest,"validation":"Native emulators on firmware 4.33.2 only; physical watches unverified.","targets":meta["pebble"]["targetPlatforms"]},indent=2)+"\n")

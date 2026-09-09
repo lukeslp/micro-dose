@@ -1,8 +1,8 @@
 # Micro Dose Syndicate for Pebble
 
-By Luke Steuber. Native testing build 0.3.0.
+By Luke Steuber. Native testing build 0.4.0.
 
-A fictional calculator-era economy adapted for Pebble. The dashboard has a city silhouette, a large cash plaque, labeled credibility/heat meters and an outlined setting card with an accent tab. Menus use an accent tab and outline to identify selection. The current development version adds a career campaign and a deliberate way to reduce heat. Read the night's intel, set price, quantity, quality and distribution, then run the night. Grow cash and credibility while keeping heat below 100. Negative cash ends the run; heat at 100 brings a bust.
+A fictional calculator-era economy adapted for Pebble. The dashboard has a city silhouette, a large cash plaque, labeled credibility/heat meters and an outlined setting card with an accent tab. Menus use an accent tab and outline to identify selection. Version 0.4.0 adds a career campaign and a deliberate way to reduce heat. Read the night's intel, set price, quantity, quality and distribution, then run the night. Grow cash and credibility while keeping heat below 100. Negative cash ends the run; heat at 100 brings a bust.
 
 - Up/Down browse Price, Cook, Quality, Lane, District, Front, Run night, Career, and Lay low.
 - Select opens a setting. Up/Down adjust it; Select returns to the dashboard. Back also leaves the editor with its current values.
@@ -31,7 +31,7 @@ Lay low advances one night, costs $150 in expenses, reduces heat by 18 and credi
 
 The new save stores finances, career and ownership together in alternating checksummed records. Interrupted writes preserve the previous valid campaign. A failed save pauses play and offers retry. Older saves retain their exact financial state, owned properties and access to all four previously available lanes. Their career counters start at zero; unknown historical earnings are never inferred from cash. The old single-record save remains as a recovery source. New empire still resets the whole campaign after confirmation.
 
-These career changes are not yet in the archived 0.3.0 package. A simple forecast-aware campaign simulation reached Empire in 200/200 seeds, averaging 76 nights. This proves reachability for that strategy, not human difficulty or session length.
+Version 0.4.0 contains the career changes; archived 0.3.0 remains available. A simple forecast-aware campaign simulation reached Empire in 200/200 seeds, averaging 76 nights. This proves reachability for that strategy, not human difficulty or session length.
 
 Source: this repository's `game.js`, starting at `7a13b01`. No real substance-production instructions or network services are involved.
 
@@ -60,4 +60,13 @@ Targets: Pebble Time 2 (`emery`, 200 by 228) and Pebble Round 2 (`gabbro`, 260 b
 
 Native emulator validation uses firmware 4.33.2. Older firmware and physical watches are unverified. The firmware check alone does not prove compatibility with an older app loader. Physical touch accuracy, readability and battery behavior need device testing. Luke's separate Hexsweeper launch failure is unresolved; these packages are testing builds, not a claim that the watch connection or launch issue has been fixed.
 
-Packaged artifacts live under `release/0.3.0/`, including PBW, standalone native source, screenshots, reports and SHA-256 sums. Version 0.2.0 has an Unlisted store draft. This 0.3.0 candidate is staged locally.
+Packaged artifacts live under `release/0.4.0/`, including PBW, standalone native source, screenshots, reports and SHA-256 sums. Version 0.2.0 has an Unlisted store draft. Version 0.4.0 is staged locally.
+
+
+The native campaign suite (`test/native_campaign.py emery` and `gabbro`, using
+pebble-tool's Python) plays from Runner through Empire with normal controls.
+It buys properties with earned cash, lowers heat through Lay low, checks campaign
+and property resume, and continues playing after Empire. Packaging requires both
+the basic interaction suite and this campaign suite for each target and exact PBW.
+
+Both native suites pass on both watch shapes for the exact 0.4.0 PBW. Purchase-triggered promotions show the new rank, and the final promotion says Empire built.

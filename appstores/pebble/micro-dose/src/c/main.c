@@ -132,15 +132,23 @@ static void draw(Layer *l, GContext *c) {
   }
   if (screen == 5) {
     int offset = h > 240 ? 16 : 0;
-    if (purchase_report)
+    if (g.rank > previous_rank && g.rank == 5)
+      snprintf(b, sizeof b, "EMPIRE BUILT");
+    else if (g.rank > previous_rank)
+      snprintf(b, sizeof b, "PROMOTED %d/6", g.rank + 1);
+    else if (purchase_report)
       snprintf(b, sizeof b, "PURCHASE");
     else
-      snprintf(b, sizeof b, g.rank > previous_rank ? "PROMOTED %d/6" : "NIGHT %d",
-               g.rank > previous_rank ? g.rank + 1 : report_day);
+      snprintf(b, sizeof b, "NIGHT %d", report_day);
     text(c, b, 12 + offset, 24, false);
     postcard_draw(c, GPoint((w - 144) / 2, 42 + offset), scene, report_day);
     if (purchase_report) {
-      text(c, g.message, 110 + offset, 44, false);
+      if (g.rank > previous_rank) {
+        text(c, ranks[g.rank], 108 + offset, 24, false);
+        text(c, g.message, 130 + offset, 24, false);
+      } else {
+        text(c, g.message, 110 + offset, 44, false);
+      }
     } else {
       if (g.rank > previous_rank) snprintf(b, sizeof b, "%s", ranks[g.rank]);
       else if (rest_report) snprintf(b, sizeof b, "Lay low: heat -18");
@@ -214,6 +222,7 @@ static void draw(Layer *l, GContext *c) {
   text(c, b, h - (h > 240 ? 45 : 28), 23, false);
 }
 static void refresh(void) {
+  APP_LOG(APP_LOG_LEVEL_INFO, "MD assets territories=%d fronts=%d", g.territories, g.fronts);
   APP_LOG(APP_LOG_LEVEL_INFO, "MD career rank=%d earned=%ld good=%lu quiet=%lu",
           g.rank, (long)g.earned, (unsigned long)g.good_nights, (unsigned long)g.quiet_nights);
   APP_LOG(APP_LOG_LEVEL_INFO,
