@@ -1,6 +1,6 @@
 {
   "name": "micro-dose",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "author": "Luke Steuber",
   "private": true,
   "dependencies": {},
@@ -18,7 +18,13 @@
     },
     "messageKeys": [],
     "resources": {
-      "media": []
+      "media": [
+        {
+          "type": "bitmap",
+          "name": "CITY",
+          "file": "images/skyline.png"
+        }
+      ]
     }
   }
 }

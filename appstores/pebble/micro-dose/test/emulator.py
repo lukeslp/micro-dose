@@ -104,7 +104,7 @@ def run(platform):
     def current():
         for line in reversed(logs):
             if 'MD screen=' in line:
-                state = {k: int(v) for k, v in re.findall(r'(\w+)=(\d+)', line)}
+                state = {k: int(v) for k, v in re.findall(r'(\w+)=(-?\d+)', line)}
                 return state
         raise AssertionError('No native state received')
     def count():
@@ -181,8 +181,34 @@ def run(platform):
         button('Back');expect(screen=1);grab('pause')
         button('Down');button('Down');button('Select')
         expect(screen=3);grab('confirm');button('Select');expect(screen=0)
+        # A denied purchase must show its actual message, never expansion art.
+        button('Select');expect(screen=4)
+        button('Select');expect(screen=6)
+        button('Down');button('Select');expect(screen=5)
+        assert any('report_scene=0' in x and 'purchase=1' in x for x in logs)
+        grab('purchase-denied')
+        touch([(width//2, height//2)]);expect(screen=0)
+        # Zero production gives repeatable losses without changing the binary.
+        for _ in range(3): button('Up')
+        expect(choice=1)
+        button('Select')
+        for _ in range(6): button('Up')
+        button('Select')
+        for _ in range(5): button('Down')
+        expect(choice=6)
+        for n in range(32):
+            day = current()['day']
+            button('Select');expect(screen=5)
+            assert any(f'report_day={day} ' in x for x in logs)
+            grab('loss-' + str(n))
+            over = current()['over']
+            touch([(width//2,height//2)]);expect(screen=0)
+            if over:
+                grab('terminal')
+                break
+        assert over, 'Expected bankruptcy from repeated zero-production nights'
         assert not any('fault' in x.lower() or 'crash' in x.lower() for x in logs)
-        report={'platform':platform,'sdk':SDK_VERSION,'pbwSHA256':installed_sha,'passed':True,'checks':['launch','help','edit plan','run night and report','save and relaunch','touch edit','cancel purchase','cancel reset'],'frames':frames,'logs':logs}
+        report={'platform':platform,'sdk':SDK_VERSION,'pbwSHA256':installed_sha,'passed':True,'checks':['launch','help','edit plan','run night and report','save and relaunch','touch edit','cancel purchase','cancel reset','denied purchase report','completed-night numbering','repeated illustrated reports','touch report dismissal','terminal report'],'frames':frames,'logs':logs}
         (out/f'{platform}-report.json').write_text(json.dumps(report,indent=2))
         print('PASS',platform)
     finally:

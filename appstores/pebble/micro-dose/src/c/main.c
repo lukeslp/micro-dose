@@ -1,7 +1,11 @@
 // Micro Dose Syndicate for Pebble. Luke Steuber.
 #include "game.h"
+#include "postcard.h"
 #include <pebble.h>
 static Game g;
+static ReportScene scene;
+static int report_day;
+static bool purchase_report;
 static Window *win;
 static Layer *layer;
 static int w, h, choice, menu, screen = 2, sx, sy;
@@ -110,12 +114,27 @@ static void draw(Layer *l, GContext *c) {
     return;
   }
   if (screen == 5) {
-    text(c, "NIGHT REPORT", 22, 34, true);
-    text(c, g.message, 66, 60, true);
-    snprintf(b, sizeof b, "Cash $%ld\nCred %d  Heat %d", (long)g.cash, g.cred,
-             g.heat);
-    text(c, b, 135, 52, false);
-    text(c, "Select to continue", h - 36, 28, false);
+    int offset = h > 240 ? 16 : 0;
+    if (purchase_report)
+      snprintf(b, sizeof b, "PURCHASE");
+    else
+      snprintf(b, sizeof b, "NIGHT %d", report_day);
+    text(c, b, 12 + offset, 24, false);
+    postcard_draw(c, GPoint((w - 144) / 2, 42 + offset), scene, report_day);
+    if (purchase_report) {
+      text(c, g.message, 110 + offset, 44, false);
+    } else {
+      snprintf(b, sizeof b, "Sold %d / %d", g.sold, g.units);
+      text(c, b, 108 + offset, 24, false);
+      snprintf(b, sizeof b, "Net %s$%ld", g.profit < 0 ? "-" : "+",
+               (long)(g.profit < 0 ? -g.profit : g.profit));
+      text(c, b, 129 + offset, 30, true);
+    }
+    snprintf(b, sizeof b, "Cash $%ld", (long)g.cash);
+    text(c, b, 157 + offset, 24, false);
+    snprintf(b, sizeof b, "Cred %d  Heat %d", g.cred, g.heat);
+    text(c, b, 179 + offset, 24, false);
+    text(c, "Select: continue", 201 + offset, 24, false);
     return;
   }
   if (g.over) {
@@ -170,13 +189,19 @@ static void draw(Layer *l, GContext *c) {
   graphics_fill_rect(c, GRect(28, 156, 3, 36), 0, GCornerNone);
   value(b, sizeof b);
   text(c, b, 153, 43, false);
-  snprintf(b, sizeof b, h > 240 ? "%d/7  Select" : "%d/7  Up/Down  Select", choice + 1);
+  snprintf(b, sizeof b, h > 240 ? "%d/7  Select" : "%d/7  Up/Down  Select",
+           choice + 1);
   text(c, b, h - (h > 240 ? 45 : 28), 23, false);
 }
 static void refresh(void) {
   APP_LOG(APP_LOG_LEVEL_INFO,
           "MD screen=%d choice=%d day=%d cash=%ld heat=%d over=%d", screen,
           choice, g.day, (long)g.cash, g.heat, g.over);
+  if (screen == 5)
+    APP_LOG(APP_LOG_LEVEL_INFO, "MD report_scene=%d report_day=%d purchase=%d",
+            scene, report_day, purchase_report);
+  else
+    postcard_release();
   layer_mark_dirty(layer);
 }
 static int adjust(int v, int d, int lo, int hi) {
@@ -212,7 +237,10 @@ static void action(int b) {
       menu = 1 - menu;
     else {
       if (menu) {
-        buy(&g, choice == 5, choice == 5 ? front : district);
+        bool purchased = buy(&g, choice == 5, choice == 5 ? front : district);
+        purchase_report = true;
+        report_day = g.day;
+        scene = purchased ? SCENE_EXPANSION : SCENE_QUIET;
         save();
         screen = 5;
       } else
@@ -281,7 +309,11 @@ static void action(int b) {
     else if (b == 2)
       choice = (choice + 1) % 7;
     else if (choice == 6) {
+      int completed_event = g.event, previous_heat = g.heat;
+      report_day = g.day;
+      purchase_report = false;
       run_night(&g);
+      scene = report_scene(&g, completed_event, previous_heat);
       save();
       screen = 5;
     } else
@@ -391,5 +423,6 @@ int main(void) {
   if (touch_on)
     touch_service_unsubscribe();
   app_focus_service_unsubscribe();
+  postcard_release();
   window_destroy(win);
 }
