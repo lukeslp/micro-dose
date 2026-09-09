@@ -1,0 +1,28 @@
+{
+  "name": "Micro Dose",
+  "slug": "micro-dose",
+  "version": "0.2.0",
+  "root": "/Users/luke/workspace/micro-dose/appstores/pebble/micro-dose",
+  "pbw": "/Users/luke/workspace/micro-dose/appstores/pebble/micro-dose/release/0.2.0/micro-dose-0.2.0.pbw",
+  "pbwSHA256": "21e12922de30bc456850250fcf37b6f14e13ca5028caef61a35c55d023d978a5",
+  "description": "A fictional calculator-era underworld economy. Set price, quantity, quality and distribution, then run the night and read the results. Buy districts and fronts, grow cash and credibility, and keep heat below 100. Up and Down browse; Select edits. Every night is a tradeoff. Includes the core economy, districts and fronts; crew and rival systems are outside this watch edition.\n\nFor Pebble Time 2 and Round 2. Touch requires firmware 4.33.2; button controls remain available. By Luke Steuber.",
+  "category": "Games",
+  "visibility": "Unlisted",
+  "releaseState": "Draft",
+  "media": "/Users/luke/workspace/micro-dose/appstores/pebble/micro-dose/store/0.2.0",
+  "primary": "01-gameplay.gif",
+  "targets": [
+    "emery",
+    "gabbro"
+  ],
+  "physicalValidation": "Not performed",
+  "gifStyle": "Sequence of unchanged native gameplay captures, 1300 ms per frame",
+  "nativeSources": {
+    "release/0.2.0/emery-map.png": "5a4fef28fc01dbfcd0b8bb58382d5b853d07fde2d0b65763174899406055ac45",
+    "release/0.2.0/emery-edit.png": "8d9beb53b50d330c749a08e813c9eab3ac80e92401ac24bb1f945331ccf856f0",
+    "release/0.2.0/emery-report.png": "d3dd847297b4f6f7c5962e1849eb0073f21b97970f3f7747e20fb98afdd08293",
+    "release/0.2.0/gabbro-map.png": "08537310d3dd508df90af26e55fe6cb1405da531b9a7a2afcf064e4d444c65d1",
+    "release/0.2.0/gabbro-edit.png": "fc2b7ea37db42be06927fbf91d4a9feb295f7b1bd44354bbc458ae7c3511b2f6",
+    "release/0.2.0/gabbro-report.png": "e1732329bb81cb225ba8fcb6948f5a220dc73521bb844c68306d59947cc3cb39"
+  }
+}

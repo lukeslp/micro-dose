@@ -1,0 +1,29 @@
+{
+  "name": "Micro Dose",
+  "version": "0.2.0",
+  "appId": "0e8d7ac981644076ac833e25",
+  "dashboardURL": "https://developer.repebble.com/dashboard/apps/0e8d7ac981644076ac833e25/edit",
+  "appstoreURL": "https://apps.repebble.com/0e8d7ac981644076ac833e25",
+  "visibility": "Unlisted",
+  "releaseState": "Draft",
+  "verifiedAt": "2026-09-09T19:20:07.189518+00:00",
+  "pbwSHA256": "21e12922de30bc456850250fcf37b6f14e13ca5028caef61a35c55d023d978a5",
+  "physicalValidation": "Not performed",
+  "icons": [
+    80,
+    144
+  ],
+  "media": {
+    "emery": {
+      "screenshots": 5,
+      "banner": 1,
+      "primaryGIF": "https://developer.repebble.com/api/assets/screenshots/0e8d7ac981644076ac833e25/emery/70039fa1-00bb-4c62-9571-bed2efa73598.gif"
+    },
+    "gabbro": {
+      "screenshots": 5,
+      "banner": 1,
+      "primaryGIF": "https://developer.repebble.com/api/assets/screenshots/0e8d7ac981644076ac833e25/gabbro/23df3eea-be9b-4f64-986c-1094beaa740d.gif"
+    }
+  },
+  "verification": "Reopened both saved media panels; primary GIF URLs, five screenshots, banners, and draft/visibility states verified."
+}
