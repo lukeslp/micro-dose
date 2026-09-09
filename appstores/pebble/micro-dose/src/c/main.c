@@ -1,4 +1,4 @@
-// Micro Crawl for Pebble. Luke Steuber.
+// Micro Dose Syndicate for Pebble. Luke Steuber.
 #include "game.h"
 #include <pebble.h>
 static Game g;
@@ -37,10 +37,12 @@ static void text(GContext *c, const char *s, int y, int height, bool large) {
                      GTextAlignmentCenter, NULL);
 }
 static void row(GContext *c, const char *s, int y, bool on) {
-  graphics_context_set_fill_color(c, on ? GColorDarkGray : GColorBlack);
+  graphics_context_set_fill_color(c, GColorBlack);
   graphics_fill_rect(c, GRect(26, y, w - 52, 32), 5, GCornersAll);
   if (on) {
-    graphics_context_set_stroke_color(c, GColorWhite);
+    graphics_context_set_fill_color(c, GColorCyan);
+    graphics_fill_rect(c, GRect(27, y + 5, 3, 22), 0, GCornerNone);
+    graphics_context_set_stroke_color(c, GColorLightGray);
     graphics_draw_round_rect(c, GRect(26, y, w - 52, 32), 5);
   }
   text(c, s, y + 3, 28, false);
@@ -79,8 +81,8 @@ static void draw(Layer *l, GContext *c) {
   if (screen == 2) {
     text(c, "MICRO DOSE", 18, 32, true);
     text(c,
-         "Up/Down browse.\nSelect edits or runs.\nSet price, quantity, quality "
-         "and lane.\nGrow cash and cred. Keep heat below 100.",
+         "Up/Down browse.\nSelect edits or runs.\nPlan, then run a "
+         "night.\nGrow cash and cred.\nKeep heat below 100.",
          54, 128, false);
     text(c, "Select to begin", h - 37, 28, false);
     return;
@@ -131,18 +133,45 @@ static void draw(Layer *l, GContext *c) {
     row(c, "Select to keep", h - 46, true);
     return;
   }
+  // A compact city silhouette frames the ledger without occupying text rows.
+  graphics_context_set_fill_color(c, GColorDarkGray);
+  for (int i = 0; i < 7; i++) {
+    int xx = w / 2 - 70 + i * 21, hh = 10 + ((i * 13) % 23);
+    graphics_fill_rect(c, GRect(xx, 69 - hh, 15, hh), 0, GCornerNone);
+  }
   snprintf(b, sizeof b, "NIGHT %d", g.day);
-  text(c, b, 14, 28, false);
+  text(c, b, 13, 24, false);
   snprintf(b, sizeof b, "$%ld", (long)g.cash);
-  text(c, b, 39, 32, true);
-  snprintf(b, sizeof b, "Cred %d  Heat %d", g.cred, g.heat);
-  text(c, b, 73, 26, false);
+  // Opaque central plaque keeps large cash digits distinct from the skyline.
+  graphics_context_set_fill_color(c, GColorBlack);
+  graphics_fill_rect(c, GRect(w / 2 - 48, 38, 96, 32), 2, GCornersAll);
+  text(c, b, 37, 32, true);
+  snprintf(b, sizeof b, "Cred %d   Heat %d", g.cred, g.heat);
+  text(c, b, 72, 23, false);
+  int barw = (w - 70) / 2;
+  for (int k = 0; k < 2; k++) {
+    int xx = 30 + k * (barw + 10), v = k ? g.heat : g.cred;
+    if (v < 0)
+      v = 0;
+    if (v > 100)
+      v = 100;
+    graphics_context_set_stroke_color(c, GColorLightGray);
+    graphics_draw_rect(c, GRect(xx, 98, barw, 6));
+    graphics_context_set_fill_color(c, k ? GColorOrange : GColorCyan);
+    graphics_fill_rect(c, GRect(xx + 1, 99, (barw - 2) * v / 100, 4), 0,
+                       GCornerNone);
+  }
   snprintf(b, sizeof b, "%s / %s\n%s", vibes[g.vibe], flows[g.flow],
            events[g.event]);
-  text(c, b, 103, 45, false);
+  text(c, b, 106, 43, false);
+  graphics_context_set_stroke_color(c, GColorLightGray);
+  graphics_draw_round_rect(c, GRect(26, 151, w - 52, 47), 4);
+  graphics_context_set_fill_color(c, GColorCyan);
+  graphics_fill_rect(c, GRect(28, 156, 3, 36), 0, GCornerNone);
   value(b, sizeof b);
-  text(c, b, 151, 50, true);
-  text(c, "Up/Down   Select", h - 30, 25, false);
+  text(c, b, 153, 43, false);
+  snprintf(b, sizeof b, h > 240 ? "%d/7  Select" : "%d/7  Up/Down  Select", choice + 1);
+  text(c, b, h - (h > 240 ? 45 : 28), 23, false);
 }
 static void refresh(void) {
   APP_LOG(APP_LOG_LEVEL_INFO,

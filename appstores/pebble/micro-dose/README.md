@@ -1,8 +1,8 @@
 # Micro Dose Syndicate for Pebble
 
-By Luke Steuber. Native testing build 0.1.0.
+By Luke Steuber. Native testing build 0.2.0.
 
-A fictional calculator-era economy adapted for Pebble. Read the night's intel, set price, quantity, quality and distribution, then run the night. Grow cash and credibility while keeping heat below 100. Negative cash ends the run; heat at 100 brings a bust.
+A fictional calculator-era economy adapted for Pebble. Version 0.2 gives the dashboard a city silhouette, a large cash plaque, labeled credibility/heat meters and an outlined setting card with an accent tab. Menus use an accent tab and outline to identify selection. Existing saves and economy rules are unchanged. Read the night's intel, set price, quantity, quality and distribution, then run the night. Grow cash and credibility while keeping heat below 100. Negative cash ends the run; heat at 100 brings a bust.
 
 - Up/Down browse Price, Cook, Quality, Lane, District, Front, and Run night.
 - Select opens a setting. Up/Down adjust it; Select returns to the dashboard. Back also leaves the editor with its current values.
@@ -35,4 +35,4 @@ Targets: Pebble Time 2 (`emery`, 200 by 228) and Pebble Round 2 (`gabbro`, 260 b
 
 Native emulator validation uses firmware 4.33.2. Older firmware and physical watches are unverified. The firmware check alone does not prove compatibility with an older app loader. Physical touch accuracy, readability and battery behavior need device testing. Luke's separate Hexsweeper launch failure is unresolved; these packages are testing builds, not a claim that the watch connection or launch issue has been fixed.
 
-Packaged artifacts live under `release/0.1.0/`, including PBW, standalone native source, screenshots, reports and SHA-256 sums. Nothing has been published to a store.
+Packaged artifacts live under `release/0.2.0/`, including PBW, standalone native source, screenshots, reports and SHA-256 sums. Nothing has been published to a store.
