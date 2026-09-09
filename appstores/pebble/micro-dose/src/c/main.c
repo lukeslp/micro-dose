@@ -1,36 +1,24 @@
 // Micro Dose Syndicate for Pebble. Luke Steuber.
 #include "game.h"
+#include "save.h"
 #include "postcard.h"
 #include <pebble.h>
 static Game g;
 static ReportScene scene;
 static int report_day;
-static bool purchase_report;
+static bool purchase_report, rest_report;
+static int previous_rank;
+static bool save_failed;
 static Window *win;
 static Layer *layer;
 static int w, h, choice, menu, screen = 2, sx, sy;
 static bool touch_on, touching, moved;
 static int district = 1, front;
 static AppTimer *tap_timer;
-typedef struct {
-  uint32_t magic;
-  Game game;
-  uint32_t checksum;
-} Save;
-_Static_assert(sizeof(Save) <= PERSIST_DATA_MAX_LENGTH, "Save too large");
-static uint32_t sum(const Save *s) {
-  const uint8_t *p = (const uint8_t *)s;
-  uint32_t v = 2166136261u;
-  for (unsigned i = 0; i < offsetof(Save, checksum); i++)
-    v = (v ^ p[i]) * 16777619u;
-  return v;
-}
-static void save(void) {
-  Save s = {0};
-  s.magic = 0x4d443031;
-  s.game = g;
-  s.checksum = sum(&s);
-  persist_write_data(1, &s, sizeof s);
+static const SaveIO save_io = {persist_read_data, persist_write_data};
+static bool save(void) {
+  save_failed = !save_store(&save_io, &g);
+  return !save_failed;
 }
 static void text(GContext *c, const char *s, int y, int height, bool large) {
   graphics_context_set_text_color(c, GColorWhite);
@@ -67,21 +55,50 @@ static void value(char *b, size_t n) {
     snprintf(b, n, "%s", lanes[g.lane]);
     break;
   case 4:
+    if (!(g.territories & (1 << district)) && g.rank < required_rank(false, district)) {
+      snprintf(b,n,"%s\nNeeds level %d",districts[district],required_rank(false,district)+1);
+      break;
+    }
     snprintf(b, n, "%s\n$%d%s", districts[district], district_cost[district],
              g.territories & (1 << district) ? " (owned)" : "");
     break;
   case 5:
+    if (!(g.fronts & (1 << front)) && g.rank < required_rank(true, front)) {
+      snprintf(b,n,"%s\nNeeds level %d",front_names[front],required_rank(true,front)+1);
+      break;
+    }
     snprintf(b, n, "%s\n$%d%s", front_names[front], front_cost[front],
              g.fronts & (1 << front) ? " (owned)" : "");
     break;
-  default:
+  case 6:
     snprintf(b, n, "Run night %d", g.day);
+    break;
+  case 7:
+    snprintf(b, n, "Career: %s", ranks[g.rank]);
+    break;
+  default:
+    snprintf(b, n, "Lay low: $150\nHeat -18; takes a night");
   }
 }
 static void draw(Layer *l, GContext *c) {
   graphics_context_set_fill_color(c, GColorBlack);
   graphics_fill_rect(c, GRect(0, 0, w, h), 0, GCornerNone);
   char b[80];
+  if (save_failed) {
+    text(c, "SAVE INTERRUPTED", 30, 52, true);
+    text(c, "Select to retry.\nPlay pauses until saved.", 96, 74, false);
+    return;
+  }
+  if (screen == 7) {
+    text(c, g.rank == 5 ? "EMPIRE BUILT" : "YOUR CAREER", 22, 33, true);
+    snprintf(b, sizeof b, "Level %d/6: %s", g.rank + 1, ranks[g.rank]);
+    text(c, b, 60, 44, false);
+    career_goal(&g, b, sizeof b);
+    text(c, b, 108, 48, false);
+    text(c, career_reward(&g), 160, 38, false);
+    text(c, "Select to return", h - 28, 24, false);
+    return;
+  }
   if (screen == 2) {
     text(c, "MICRO DOSE", 18, 32, true);
     text(c,
@@ -118,13 +135,16 @@ static void draw(Layer *l, GContext *c) {
     if (purchase_report)
       snprintf(b, sizeof b, "PURCHASE");
     else
-      snprintf(b, sizeof b, "NIGHT %d", report_day);
+      snprintf(b, sizeof b, g.rank > previous_rank ? "PROMOTED %d/6" : "NIGHT %d",
+               g.rank > previous_rank ? g.rank + 1 : report_day);
     text(c, b, 12 + offset, 24, false);
     postcard_draw(c, GPoint((w - 144) / 2, 42 + offset), scene, report_day);
     if (purchase_report) {
       text(c, g.message, 110 + offset, 44, false);
     } else {
-      snprintf(b, sizeof b, "Sold %d / %d", g.sold, g.units);
+      if (g.rank > previous_rank) snprintf(b, sizeof b, "%s", ranks[g.rank]);
+      else if (rest_report) snprintf(b, sizeof b, "Lay low: heat -18");
+      else snprintf(b, sizeof b, "Sold %d / %d", g.sold, g.units);
       text(c, b, 108 + offset, 24, false);
       snprintf(b, sizeof b, "Net %s$%ld", g.profit < 0 ? "-" : "+",
                (long)(g.profit < 0 ? -g.profit : g.profit));
@@ -134,7 +154,7 @@ static void draw(Layer *l, GContext *c) {
     text(c, b, 157 + offset, 24, false);
     snprintf(b, sizeof b, "Cred %d  Heat %d", g.cred, g.heat);
     text(c, b, 179 + offset, 24, false);
-    text(c, "Select: continue", 201 + offset, 24, false);
+    text(c, g.rank == 5 ? "Select: keep playing" : "Select: continue", 201 + offset, 24, false);
     return;
   }
   if (g.over) {
@@ -158,7 +178,7 @@ static void draw(Layer *l, GContext *c) {
     int xx = w / 2 - 70 + i * 21, hh = 10 + ((i * 13) % 23);
     graphics_fill_rect(c, GRect(xx, 69 - hh, 15, hh), 0, GCornerNone);
   }
-  snprintf(b, sizeof b, "NIGHT %d", g.day);
+  snprintf(b, sizeof b, "NIGHT %d  L%d", g.day, g.rank + 1);
   text(c, b, 13, 24, false);
   snprintf(b, sizeof b, "$%ld", (long)g.cash);
   // Opaque central plaque keeps large cash digits distinct from the skyline.
@@ -189,11 +209,13 @@ static void draw(Layer *l, GContext *c) {
   graphics_fill_rect(c, GRect(28, 156, 3, 36), 0, GCornerNone);
   value(b, sizeof b);
   text(c, b, 153, 43, false);
-  snprintf(b, sizeof b, h > 240 ? "%d/7  Select" : "%d/7  Up/Down  Select",
+  snprintf(b, sizeof b, h > 240 ? "%d/9  Select" : "%d/9  Up/Down  Select",
            choice + 1);
   text(c, b, h - (h > 240 ? 45 : 28), 23, false);
 }
 static void refresh(void) {
+  APP_LOG(APP_LOG_LEVEL_INFO, "MD career rank=%d earned=%ld good=%lu quiet=%lu",
+          g.rank, (long)g.earned, (unsigned long)g.good_nights, (unsigned long)g.quiet_nights);
   APP_LOG(APP_LOG_LEVEL_INFO,
           "MD screen=%d choice=%d day=%d cash=%ld heat=%d over=%d", screen,
           choice, g.day, (long)g.cash, g.heat, g.over);
@@ -209,6 +231,16 @@ static int adjust(int v, int d, int lo, int hi) {
   return v < lo ? lo : v > hi ? hi : v;
 }
 static void action(int b) {
+  if (save_failed) {
+    if (b == 1) save();
+    refresh();
+    return;
+  }
+  if (screen == 7) {
+    screen = 0;
+    refresh();
+    return;
+  }
   if (screen == 2 || screen == 5) {
     screen = 0;
     refresh();
@@ -237,6 +269,7 @@ static void action(int b) {
       menu = 1 - menu;
     else {
       if (menu) {
+        previous_rank = g.rank;
         bool purchased = buy(&g, choice == 5, choice == 5 ? front : district);
         purchase_report = true;
         report_day = g.day;
@@ -267,7 +300,7 @@ static void action(int b) {
         menu = 0;
       }
       if (m == 3) {
-        save();
+        if (!save()) { refresh(); return; }
         window_stack_pop_all(false);
         return;
       }
@@ -290,8 +323,11 @@ static void action(int b) {
         g.units = adjust(g.units, d * 5, 0, 200);
       if (choice == 2)
         g.purity = adjust(g.purity, d * 5, 60, 100);
-      if (choice == 3)
-        g.lane = (g.lane + d + 4) % 4;
+      if (choice == 3) {
+        int candidate = g.lane;
+        do { candidate = (candidate + d + 4) % 4; } while (!lane_allowed(&g, candidate));
+        g.lane = candidate;
+      }
       if (choice == 4)
         district = 1 + (district - 1 + d + 5) % 5;
       if (choice == 5)
@@ -305,15 +341,19 @@ static void action(int b) {
     menu = 0;
   } else if (!g.over) {
     if (b == 0)
-      choice = (choice + 6) % 7;
+      choice = (choice + 8) % 9;
     else if (b == 2)
-      choice = (choice + 1) % 7;
-    else if (choice == 6) {
+      choice = (choice + 1) % 9;
+    else if (choice == 7) screen = 7;
+    else if (choice == 6 || choice == 8) {
       int completed_event = g.event, previous_heat = g.heat;
       report_day = g.day;
       purchase_report = false;
-      run_night(&g);
-      scene = report_scene(&g, completed_event, previous_heat);
+      rest_report = choice == 8;
+      previous_rank = g.rank;
+      if (rest_report) lay_low(&g); else run_night(&g);
+      scene = report_scene(&g, rest_report ? 0 : completed_event, previous_heat);
+      if (g.rank > previous_rank) scene = SCENE_EXPANSION;
       save();
       screen = 5;
     } else
@@ -358,7 +398,7 @@ static void touch(const TouchEvent *e, void *x) {
     cancel_tap();
     if (!tap)
       return;
-    if (screen == 2 || screen == 5)
+    if (save_failed || screen == 2 || screen == 5 || screen == 7)
       action(1);
     else if (screen == 1 && sy >= 58 && sy < 194) {
       menu = (sy - 58) / 34;
@@ -399,12 +439,8 @@ static void load(Window *x) {
 static void unload(Window *x) { layer_destroy(layer); }
 int main(void) {
   game_init(&g, (uint32_t)time(NULL));
-  Save s = {0};
-  if (persist_read_data(1, &s, sizeof s) == sizeof s && s.magic == 0x4d443031 &&
-      s.checksum == sum(&s) && game_valid(&s.game)) {
-    g = s.game;
-    screen = 0;
-  }
+  if (save_load(&save_io, &g)) screen = 0;
+  save();
   win = window_create();
   window_set_background_color(win, GColorBlack);
   window_set_window_handlers(win,

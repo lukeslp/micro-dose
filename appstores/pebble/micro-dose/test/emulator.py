@@ -105,6 +105,10 @@ def run(platform):
         for line in reversed(logs):
             if 'MD screen=' in line:
                 state = {k: int(v) for k, v in re.findall(r'(\w+)=(-?\d+)', line)}
+                for career in reversed(logs):
+                    if 'MD career ' in career:
+                        state.update({k: int(v) for k, v in re.findall(r'(\w+)=(-?\d+)', career)})
+                        break
                 return state
         raise AssertionError('No native state received')
     def count():
@@ -163,7 +167,8 @@ def run(platform):
         touch([(width*3//4,100)])
         grab('edit')
         button('Select');expect(screen=0)
-        button('Up');expect(choice=6)
+        for _ in range(3): button('Up')
+        expect(choice=6)
         button('Select');expect(screen=5,day=2)
         grab('report')
         button('Select');expect(screen=0)
@@ -207,8 +212,39 @@ def run(platform):
                 grab('terminal')
                 break
         assert over, 'Expected bankruptcy from repeated zero-production nights'
+        # Start a fresh campaign and earn a promotion through normal night actions.
+        button('Back');button('Down');button('Down');button('Select')
+        button('Down');button('Select');expect(screen=0,rank=0,day=1)
+        button('Down');expect(choice=1)
+        button('Select')
+        for _ in range(3): button('Up') # 15 units, no test-only economic overrides.
+        button('Select')
+        for _ in range(5): button('Down')
+        for night in range(12):
+            button('Select');expect(screen=5,over=0)
+            if current()['rank']:
+                grab('promotion')
+                button('Select')
+                break
+            button('Select')
+        assert current()['rank'] == 1
+        button('Down');expect(choice=7)
+        button('Select');expect(screen=7);grab('career')
+        button('Select');expect(screen=0)
+        button('Down');expect(choice=8)
+        before=current()
+        button('Select');expect(screen=5,day=before['day']+1,cash=before['cash']-150,
+                                heat=max(0,before['heat']-18),rank=1)
+        grab('lay-low')
+        button('Select')
+        before=current()
+        watch.send_packet(AppRunState(data=AppRunStateStop(uuid=APP)))
+        time.sleep(.5)
+        watch.send_packet(AppRunState(data=AppRunStateStart(uuid=APP)))
+        time.sleep(.8)
+        expect(screen=0,rank=1,earned=before['earned'],cash=before['cash'])
         assert not any('fault' in x.lower() or 'crash' in x.lower() for x in logs)
-        report={'platform':platform,'sdk':SDK_VERSION,'pbwSHA256':installed_sha,'passed':True,'checks':['launch','help','edit plan','run night and report','save and relaunch','touch edit','cancel purchase','cancel reset','denied purchase report','completed-night numbering','repeated illustrated reports','touch report dismissal','terminal report'],'frames':frames,'logs':logs}
+        report={'platform':platform,'sdk':SDK_VERSION,'pbwSHA256':installed_sha,'passed':True,'checks':['launch','help','edit plan','run night and report','save and relaunch','touch edit','cancel purchase','cancel reset','denied purchase report','completed-night numbering','repeated illustrated reports','touch report dismissal','terminal report','earned promotion','career objectives','lay low cost and heat','rank and earnings resume'],'frames':frames,'logs':logs}
         (out/f'{platform}-report.json').write_text(json.dumps(report,indent=2))
         print('PASS',platform)
     finally:

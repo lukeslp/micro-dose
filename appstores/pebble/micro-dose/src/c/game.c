@@ -16,6 +16,56 @@ const int district_cost[] = {0, 3000, 5000, 8000, 6500, 4500};
 const char *front_names[] = {"Laundromat", "Crypto mixer", "Dispensary",
                              "Restaurant"};
 const int front_cost[] = {8000, 12000, 15000, 20000};
+const char *ranks[] = {"Runner", "Dealer", "Operator", "District Boss", "Syndicate Chief", "Empire"};
+static int owned_count(int bits) {
+  int n = 0;
+  while (bits) { n += bits & 1; bits >>= 1; }
+  return n;
+}
+bool lane_allowed(const Game *g, int lane) {
+  static const int level[] = {0, 1, 2, 4};
+  return lane >= 0 && lane < 4 && (g->rank >= level[lane] || (g->legacy_lanes & (1 << lane)));
+}
+int required_rank(bool front, int i) {
+  static const int f[] = {2, 4, 3, 4}, d[] = {0, 0, 1, 3, 2, 2};
+  return i >= 0 && i < (front ? 4 : 6) ? (front ? f[i] : d[i]) : 6;
+}
+static int missing(const Game *g, int rank) {
+  static const int cash[] = {0, 1500, 5000, 12000, 30000, 60000};
+  static const int districts_needed[] = {0, 1, 2, 3, 4, 6};
+  static const int fronts_needed[] = {0, 0, 0, 1, 2, 3};
+  if (g->good_nights < 3) return 1;
+  if (g->earned < cash[rank]) return 2;
+  if (owned_count(g->territories) < districts_needed[rank]) return 3;
+  if (owned_count(g->fronts) < fronts_needed[rank]) return 4;
+  if (rank >= 4 && !g->quiet_nights) return 5;
+  if (rank == 5 && g->heat >= 60) return 6;
+  return 0;
+}
+void career_update(Game *g) {
+  if (g->over) return;
+  while (g->rank < 5 && !missing(g, g->rank + 1)) g->rank++;
+}
+const char *career_reward(const Game *g) {
+  static const char *reward[] = {"Unlock bike runners", "Unlock clubs and fronts",
+    "Unlock Heights and dispensary", "Unlock lockers and crypto", "Build your Empire", "Campaign won. Keep playing."};
+  return reward[g->rank];
+}
+void career_goal(const Game *g, char *out, size_t n) {
+  static const int dollars[] = {0,1500,5000,12000,30000,60000};
+  static const int districts_needed[] = {0,1,2,3,4,6}, fronts_needed[] = {0,0,0,1,2,3};
+  if (g->rank == 5) { snprintf(out,n,"All promotions earned."); return; }
+  int rank = g->rank + 1;
+  switch (missing(g, rank)) {
+  case 1: snprintf(out,n,"Profitable nights: %lu/3",(unsigned long)g->good_nights); break;
+  case 2: snprintf(out,n,"Net $%ld\nGoal $%d",(long)g->earned,dollars[rank]); break;
+  case 3: snprintf(out,n,"Districts owned: %d/%d",owned_count(g->territories),districts_needed[rank]); break;
+  case 4: snprintf(out,n,"Fronts owned: %d/%d",owned_count(g->fronts),fronts_needed[rank]); break;
+  case 5: snprintf(out,n,"Profit with heat below 50."); break;
+  case 6: snprintf(out,n,"Bring heat below 60."); break;
+  default: snprintf(out,n,"Ready for promotion."); break;
+  }
+}
 static unsigned rnd(Game *g) {
   unsigned x = g->rng;
   x ^= x << 13;
@@ -52,18 +102,27 @@ bool buy(Game *g, bool front, int i) {
     snprintf(g->message, 64, "Already owned.");
     return false;
   }
+  if (g->rank < required_rank(front, i)) {
+    snprintf(g->message, 64, "Unlock at %s.", ranks[required_rank(front, i)]);
+    return false;
+  }
   if (g->cash < cost) {
     snprintf(g->message, 64, "Need $%d to purchase.", cost);
     return false;
   }
   g->cash -= cost;
   *owned |= 1 << i;
+  career_update(g);
   snprintf(g->message, 64, "Bought %s", front ? front_names[i] : districts[i]);
   return true;
 }
 void run_night(Game *g) {
   if (g->over)
     return;
+  if (!lane_allowed(g, g->lane)) {
+    snprintf(g->message, 64, "This lane needs a promotion.");
+    return;
+  }
   const float vm[] = {.9f, 1.1f, 1.3f, .8f, 1.5f}, fm[] = {.7f, 1, 1.25f, 1.4f},
               lm[] = {.95f, 1.15f, 1.3f, 1.45f},
               em[] = {1, 1.6f, .6f, 1.35f, .85f, .75f, 1.4f};
@@ -88,6 +147,7 @@ void run_night(Game *g) {
   // Bound the long-running score to avoid integer overflow on endless saves.
   int64_t total = (int64_t)g->cash + g->profit;
   g->cash = total > 99999999 ? 99999999 : (int32_t)total;
+  g->earned = clamp(g->earned + g->profit, -100000, 99999999);
   float rate = g->units ? g->sold / (float)g->units : 0;
   int cred = 0, heat = lh[g->lane];
   if (g->units) {
@@ -128,8 +188,31 @@ void run_night(Game *g) {
   else if (g->heat >= 100)
     g->over = 2;
   else {
+    if (g->profit > 0) {
+      if (g->good_nights < 99999) g->good_nights++;
+      if (g->heat < 50 && g->quiet_nights < 99999) g->quiet_nights++;
+    }
+    career_update(g);
     if (g->day < 99999)
       g->day++;
+    forecast(g);
+  }
+}
+void lay_low(Game *g) {
+  if (g->over) return;
+  static const int income[] = {150, 280, 350, 450};
+  g->profit = -150;
+  for (int i = 0; i < 4; i++) if (g->fronts & (1 << i)) g->profit += income[i];
+  g->cash = clamp(g->cash + g->profit, -100000, 99999999);
+  g->earned = clamp(g->earned + g->profit, -100000, 99999999);
+  g->heat = clamp(g->heat - 18, 0, 120);
+  g->cred = clamp(g->cred - 1, 0, 120);
+  g->sold = 0;
+  snprintf(g->message, 64, "Laid low. Heat -18; expenses $150.");
+  if (g->cash < 0) g->over = 1;
+  else {
+    career_update(g);
+    if (g->day < 99999) g->day++;
     forecast(g);
   }
 }
@@ -142,5 +225,7 @@ bool game_valid(const Game *g) {
          g->flow >= 0 && g->flow < 4 && g->event >= 0 && g->event < 7 &&
          g->over >= 0 && g->over <= 2 && g->territories >= 1 &&
          g->territories < 64 && g->fronts >= 0 && g->fronts < 16 &&
-         g->message[63] == 0;
+         g->message[63] == 0 && g->rank <= 5 && g->legacy_lanes <= 15 &&
+         g->earned >= -100000 && g->earned <= 99999999 &&
+         g->good_nights <= 99999 && g->quiet_nights <= g->good_nights;
 }

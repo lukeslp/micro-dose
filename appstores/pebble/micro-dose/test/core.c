@@ -5,6 +5,7 @@ int main(void) {
   for (unsigned s = 1; s <= 10000; s++) {
     Game g;
     game_init(&g, s);
+    g.legacy_lanes = 15;
     for (int n = 0; n < 40 && !g.over; n++) {
       g.price = 20 + (n * 15) % 185;
       g.units = (n * 7) % 201;
@@ -28,10 +29,12 @@ int main(void) {
   assert(!buy(&g, false, 1));
   assert(g.cash == 7000);
   g.cash = 10000;
+  g.rank = 2;
   assert(buy(&g, true, 0));
   assert(g.cash == 2000);
   g.heat = 99;
   g.lane = 3;
+  g.legacy_lanes = 15;
   g.event = 0;
   g.purity = 100;
   run_night(&g);
