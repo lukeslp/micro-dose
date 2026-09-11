@@ -26,7 +26,7 @@ from pebble_tool.commands.screenshot import ScreenshotCommand
 from pebble_tool.commands.emucontrol import send_data_to_qemu
 import pebble_tool.sdk.emulator as emulator
 from libpebble2.services.install import AppInstaller
-from libpebble2.protocol.apps import AppRunState, AppRunStateStart, AppRunStateStop
+from libpebble2.protocol.apps import AppRunState, AppRunStateStart, AppRunStateStop, AppRunStateRequest
 from libpebble2.protocol.logs import AppLogMessage, AppLogShippingControl
 from libpebble2.communication.transports.qemu.protocol import QemuButton
 
@@ -163,6 +163,25 @@ def run(platform):
         button('Select')
         expect(screen=0)
         grab('map')
+        about_state = {k: current()[k] for k in ('day', 'cash', 'heat', 'choice')}
+        button('Back'); expect(screen=1, menu=0)
+        touch([(width//2, 34 + 3 * 38 + 18)])
+        expect(screen=8, menu=3)
+        button('Up'); expect(screen=8, menu=3)
+        portrait = grab('about')
+        assert sum(row[x*4+1] > row[x*4] + 32 for row in portrait[47:143]
+                   for x in range(width//2-48, width//2+48)) > 100, 'About portrait did not render'
+        button('Select'); expect(screen=1, menu=3, **about_state)
+        grab('about-return')
+        for _ in range(3):
+            button('Select'); expect(screen=8, menu=3)
+            touch([(width//2, 100)]); expect(screen=1, menu=3, **about_state)
+        button('Select'); expect(screen=8, menu=3)
+        pointer(width//2, 166, True); time.sleep(.08)
+        button('Back'); expect(screen=1, menu=3)
+        pointer(width//2, 166, False); time.sleep(.4)
+        expect(screen=1, menu=3, **about_state)  # Held gesture cannot reopen About.
+        button('Back'); expect(screen=0, **about_state)
         button('Select');expect(screen=4)
         touch([(width*3//4,100)])
         grab('edit')
@@ -185,7 +204,7 @@ def run(platform):
         grab('purchase')
         button('Select');expect(screen=0,cash=before['cash'])
         button('Back');expect(screen=1);grab('pause')
-        touch([(width//2, 58 + 2 * 38 + 18)])
+        touch([(width//2, 34 + 2 * 38 + 18)])
         expect(screen=3);grab('confirm')
         touch([(width//2, 132 + 18)]);expect(screen=0)
         # A denied purchase must show its actual message, never expansion art.
@@ -246,8 +265,18 @@ def run(platform):
         watch.send_packet(AppRunState(data=AppRunStateStart(uuid=APP)))
         time.sleep(.8)
         expect(screen=0,rank=1,earned=before['earned'],cash=before['cash'])
+        button('Back'); expect(screen=1, menu=0)
+        button('Up'); expect(screen=1, menu=4); grab('save-exit-selected')
+        pointer(width//2, 34 + 4 * 38 + 18, True); time.sleep(.08)
+        pointer(width//2, 34 + 4 * 38 + 18, False); time.sleep(.4)
+        active = watch.send_and_read(AppRunState(data=AppRunStateRequest()), AppRunState)
+        assert active.data.uuid != APP, 'Touch Save and exit did not close the app'
+        watch.send_packet(AppRunState(data=AppRunStateStart(uuid=APP)))
+        time.sleep(.8)
+        expect(screen=0,rank=1,earned=before['earned'],cash=before['cash'])
         assert not any('fault' in x.lower() or 'crash' in x.lower() for x in logs)
         report={'platform':platform,'sdk':SDK_VERSION,'pbwSHA256':installed_sha,'passed':True,'checks':['launch','help','edit plan','run night and report','save and relaunch','touch edit and enlarged keep row','enlarged menu and confirmation touch rows','cancel purchase','cancel reset','denied purchase report','completed-night numbering','repeated illustrated reports','touch report dismissal','terminal report','earned promotion','career objectives','lay low cost and heat','rank and earnings resume'],'frames':frames,'logs':logs}
+        report['checks'] += ['About portrait', 'About Select/Back/tap returns to original menu selection', 'About repeated reopen and no tap-through', 'five-row menu touch Save and exit resumes exact campaign']
         (out/f'{platform}-report.json').write_text(json.dumps(report,indent=2))
         print('PASS',platform)
     finally:

@@ -1,10 +1,12 @@
 # Micro Dose Syndicate for Pebble
 
-By Luke Steuber. Native testing build 0.5.0.
+By Luke Steuber. Native testing build 0.5.1.
 
 A fictional calculator-era economy adapted for Pebble. Read the night's intel, set price, quantity, quality and distribution, then run the night. Grow cash and credibility while keeping heat below 100. Negative cash ends the run; heat at 100 brings a bust.
 
 Version 0.5.0 brings the ledger closer: 24 bold text for actions and prose, 28 bold headings and cash, and a minimum of 18 bold for compact statistics. Selected actions use black text on white; labeled meters and outlined cards remain readable without relying on color. The larger 38-pixel action rows share their bounds with touch input. Reports retain the night result, sales, cash and heat on one screen around a larger city illustration. The economy, saved campaigns and number of steps are unchanged.
+
+Version 0.5.1 adds About to the pause menu, with Luke Steuber's portrait and the app version. Select, Back or a tap returns to the same menu choice while the campaign stays paused. The portrait loads only while that screen is open.
 
 - Up/Down browse Price, Cook, Quality, Lane, District, Front, Run night, Career, and Lay low.
 - Select opens a setting. Up/Down adjust it; Select returns to the dashboard. Back also leaves the editor with its current values.
@@ -62,7 +64,7 @@ Targets: Pebble Time 2 (`emery`, 200 by 228) and Pebble Round 2 (`gabbro`, 260 b
 
 Native emulator validation uses firmware 4.33.2. Older firmware and physical watches are unverified. Physical touch accuracy, readability under room light and battery behavior still need device testing.
 
-Packaged artifacts live under `release/0.5.0/`, including PBW, standalone native source, screenshots, reports and SHA-256 sums. This candidate is staged locally; older release packages remain available.
+Packaged artifacts live under `release/0.5.1/`, including PBW, standalone native source, screenshots, reports and SHA-256 sums. This candidate is staged locally; older release packages remain available.
 
 
 The native campaign suite (`test/native_campaign.py emery` and `gabbro`, using

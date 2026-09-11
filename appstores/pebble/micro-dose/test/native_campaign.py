@@ -171,7 +171,8 @@ def run(platform):
         before=current()
         watch.send_packet(AppRunState(data=AppRunStateStop(uuid=APP)));time.sleep(.5)
         watch.send_packet(AppRunState(data=AppRunStateStart(uuid=APP)));time.sleep(.8)
-        expect(**{k:v for k,v in before.items() if k not in ('screen','choice')})
+        # Screen, focused plan and pause-menu highlight are transient UI state.
+        expect(**{k:v for k,v in before.items() if k not in ('screen','choice','menu')})
         selected[:] = [1,0]
     def invest(kind):
         state=current(); rank=state['rank']; owned=state['fronts' if kind else 'territories']

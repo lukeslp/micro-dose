@@ -4,6 +4,7 @@
 #include "postcard.h"
 #include <pebble.h>
 #include "ui_style.h"
+#include "about.h"
 static Game g;
 static ReportScene scene;
 static int report_day;
@@ -15,6 +16,8 @@ static Layer *layer;
 static int w, h, choice, menu, screen = 2, sx, sy;
 static bool touch_on, touching, moved, focused = true;
 static int district = 1, front;
+enum { MENU_TOP = 34, MENU_COUNT = 5, ABOUT_SCREEN = 8 };
+static void cancel_tap(void);
 static int edit_keep_top(void) { return h - PBL_IF_ROUND_ELSE(66, 46); }
 static AppTimer *tap_timer;
 static const SaveIO save_io = {persist_read_data, persist_write_data};
@@ -96,6 +99,7 @@ static void draw(Layer *l, GContext *c) {
   graphics_context_set_fill_color(c, GColorBlack);
   graphics_fill_rect(c, GRect(0, 0, w, h), 0, GCornerNone);
   char b[80];
+  if (screen == ABOUT_SCREEN) { about_draw(c, w); return; }
   if (save_failed) {
     text(c, "SAVE PAUSED", 30, 40, true);
     text(c, "Select to retry.\nThis turn is still here.", 86, 88, false);
@@ -120,10 +124,10 @@ static void draw(Layer *l, GContext *c) {
     return;
   }
   if (screen == 1) {
-    text(c, "PAUSED", 20, 32, true);
-    const char *r[] = {"Resume", "How to play", "New empire", "Save and exit"};
-    for (int i = 0; i < 4; i++)
-      row(c, r[i], 58 + i * UI_ROW_HEIGHT, menu == i);
+    text(c, "PAUSED", 0, 32, true);
+    const char *r[] = {"Resume", "How to play", "New empire", "About", "Save and exit"};
+    for (int i = 0; i < MENU_COUNT; i++)
+      row(c, r[i], MENU_TOP + i * UI_ROW_HEIGHT, menu == i);
     return;
   }
   if (screen == 3) {
@@ -234,12 +238,13 @@ static void draw(Layer *l, GContext *c) {
 }
 static void refresh(void) {
   if (!layer) return;
+  if (screen != ABOUT_SCREEN) about_release();
   APP_LOG(APP_LOG_LEVEL_INFO, "MD assets territories=%d fronts=%d", g.territories, g.fronts);
   APP_LOG(APP_LOG_LEVEL_INFO, "MD career rank=%d earned=%ld good=%lu quiet=%lu",
           g.rank, (long)g.earned, (unsigned long)g.good_nights, (unsigned long)g.quiet_nights);
   APP_LOG(APP_LOG_LEVEL_INFO,
-          "MD screen=%d choice=%d day=%d cash=%ld heat=%d over=%d", screen,
-          choice, g.day, (long)g.cash, g.heat, g.over);
+          "MD screen=%d menu=%d choice=%d day=%d cash=%ld heat=%d over=%d", screen,
+          menu, choice, g.day, (long)g.cash, g.heat, g.over);
   if (screen == 5)
     APP_LOG(APP_LOG_LEVEL_INFO, "MD report_scene=%d report_day=%d purchase=%d",
             scene, report_day, purchase_report);
@@ -253,6 +258,12 @@ static int adjust(int v, int d, int lo, int hi) {
 }
 static void action(int b) {
   if (!focused || !layer) return;
+  if (screen == ABOUT_SCREEN) {
+    cancel_tap();
+    if (b == 1 || b == 3) screen = 1;
+    refresh();
+    return;
+  }
   if (save_failed) {
     if (b == 1) save();
     refresh();
@@ -308,9 +319,9 @@ static void action(int b) {
     if (b == 3)
       screen = 0;
     else if (b == 0)
-      menu = (menu + 3) % 4;
+      menu = (menu + MENU_COUNT - 1) % MENU_COUNT;
     else if (b == 2)
-      menu = (menu + 1) % 4;
+      menu = (menu + 1) % MENU_COUNT;
     else {
       int m = menu;
       if (m == 0)
@@ -322,6 +333,10 @@ static void action(int b) {
         menu = 0;
       }
       if (m == 3) {
+        cancel_tap();
+        screen = ABOUT_SCREEN;
+      }
+      if (m == 4) {
         if (!save()) { refresh(); return; }
         window_stack_pop_all(false);
         return;
@@ -421,10 +436,10 @@ static void touch(const TouchEvent *e, void *x) {
     cancel_tap();
     if (!tap)
       return;
-    if (save_failed || screen == 2 || screen == 5 || screen == 7)
+    if (save_failed || screen == 2 || screen == 5 || screen == 7 || screen == ABOUT_SCREEN)
       action(1);
-    else if (screen == 1 && sy >= 58 && sy < 58 + 4 * UI_ROW_HEIGHT) {
-      menu = (sy - 58) / UI_ROW_HEIGHT;
+    else if (screen == 1 && sy >= MENU_TOP && sy < MENU_TOP + MENU_COUNT * UI_ROW_HEIGHT) {
+      menu = (sy - MENU_TOP) / UI_ROW_HEIGHT;
       action(1);
     } else if (screen == 3 && sy >= 132 && sy < 210) {
       menu = sy >= 172;
@@ -460,7 +475,7 @@ static void load(Window *x) {
   layer_add_child(window_get_root_layer(x), layer);
   refresh();
 }
-static void unload(Window *x) { cancel_tap(); layer_destroy(layer); layer = NULL; }
+static void unload(Window *x) { cancel_tap(); about_release(); layer_destroy(layer); layer = NULL; }
 int main(void) {
   game_init(&g, (uint32_t)time(NULL));
   if (save_load(&save_io, &g)) screen = 0;
