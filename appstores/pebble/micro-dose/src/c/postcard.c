@@ -1,12 +1,16 @@
 #include "postcard.h"
 static GBitmap *city;
+static GPoint origin;
+static int zoom(int value) { return value * 5 / 4; }
+static GPoint point(int x, int y) { return GPoint(origin.x + zoom(x), origin.y + zoom(y)); }
 static void box(GContext *c, int x, int y, int w, int h, GColor color) {
   graphics_context_set_fill_color(c, color);
-  graphics_fill_rect(c, GRect(x, y, w, h), 0, GCornerNone);
+  GPoint p = point(x, y);
+  graphics_fill_rect(c, GRect(p.x, p.y, zoom(x + w) - zoom(x), zoom(y + h) - zoom(y)), 0, GCornerNone);
 }
 static void line(GContext *c, int x, int y, int x2, int y2, GColor color) {
   graphics_context_set_stroke_color(c, color);
-  graphics_draw_line(c, GPoint(x, y), GPoint(x2, y2));
+  graphics_draw_line(c, point(x, y), point(x2, y2));
 }
 void postcard_release(void) {
   if (city)
@@ -14,16 +18,17 @@ void postcard_release(void) {
   city = NULL;
 }
 void postcard_draw(GContext *c, GPoint p, ReportScene scene, int night) {
-  const int x = p.x, y = p.y;
+  origin = p;
+  const int x = 0, y = 0;
   box(c, x, y, 144, 64, GColorOxfordBlue);
   if (!city)
     city = gbitmap_create_with_resource(RESOURCE_ID_CITY);
   if (city) {
-    // Native-resolution crop; no filtering, generated art, or game RNG calls.
+    // Native background pixels; foreground geometry is 25 percent closer.
     GBitmap *crop = gbitmap_create_as_sub_bitmap(
-        city, GRect((night % 6) * 18, 62, 144, 64));
+        city, GRect((night % 6) * 13, 62, POSTCARD_WIDTH, POSTCARD_HEIGHT));
     if (crop) {
-      graphics_draw_bitmap_in_rect(c, crop, GRect(x, y, 144, 64));
+      graphics_draw_bitmap_in_rect(c, crop, GRect(p.x, p.y, POSTCARD_WIDTH, POSTCARD_HEIGHT));
       gbitmap_destroy(crop);
     }
   }
@@ -32,9 +37,9 @@ void postcard_draw(GContext *c, GPoint p, ReportScene scene, int night) {
   // A foreground rooftop and moon give every postcard a readable silhouette.
   if (scene == SCENE_QUIET) {
     graphics_context_set_fill_color(c, GColorPastelYellow);
-    graphics_fill_circle(c, GPoint(x + 120, y + 12), 6);
+    graphics_fill_circle(c, point(x + 120, y + 12), zoom(6));
     graphics_context_set_fill_color(c, GColorOxfordBlue);
-    graphics_fill_circle(c, GPoint(x + 123, y + 10), 5);
+    graphics_fill_circle(c, point(x + 123, y + 10), zoom(5));
     box(c, x + 18, y + 32, 56, 29, GColorDarkGray);
     box(c, x + 14, y + 30, 64, 3, GColorLightGray);
     for (int i = 0; i < 4; i++)
@@ -100,7 +105,7 @@ void postcard_draw(GContext *c, GPoint p, ReportScene scene, int night) {
       line(c, x + 16, y + 19, x + 16, y + 61, GColorWhite);
       line(c, x + 27, y + 19, x + 27, y + 61, GColorWhite);
       graphics_context_set_stroke_color(c, GColorChromeYellow);
-      graphics_draw_circle(c, GPoint(x + 127, y + 37), 5);
+      graphics_draw_circle(c, point(x + 127, y + 37), zoom(5));
       box(c, x + 125, y + 42, 3, 15, GColorChromeYellow);
       box(c, x + 128, y + 51, 5, 3, GColorChromeYellow);
       box(c, x + 128, y + 56, 5, 3, GColorChromeYellow);
@@ -108,7 +113,7 @@ void postcard_draw(GContext *c, GPoint p, ReportScene scene, int night) {
       for (int i = 0; i < 4; i++) {
         int xx = x + 76 + i * 14;
         graphics_context_set_fill_color(c, GColorWhite);
-        graphics_fill_circle(c, GPoint(xx, y + 49), 2);
+        graphics_fill_circle(c, point(xx, y + 49), zoom(2));
         box(c, xx - 2, y + 52, 5, 8, GColorLightGray);
       }
       line(c, x + 53, y + 10, x + 68, y + 23, GColorCyan);
@@ -116,13 +121,13 @@ void postcard_draw(GContext *c, GPoint p, ReportScene scene, int night) {
     } else {
       // Bicycle beside the bright shop.
       graphics_context_set_stroke_color(c, GColorWhite);
-      graphics_draw_circle(c, GPoint(x + 16, y + 55), 5);
-      graphics_draw_circle(c, GPoint(x + 32, y + 55), 5);
+      graphics_draw_circle(c, point(x + 16, y + 55), zoom(5));
+      graphics_draw_circle(c, point(x + 32, y + 55), zoom(5));
       line(c, x + 16, y + 55, x + 23, y + 46, GColorCyan);
       line(c, x + 23, y + 46, x + 32, y + 55, GColorCyan);
       line(c, x + 16, y + 55, x + 32, y + 55, GColorCyan);
     }
   }
-  graphics_context_set_stroke_color(c, GColorLightGray);
-  graphics_draw_rect(c, GRect(x, y, 144, 64));
+  graphics_context_set_stroke_color(c, GColorWhite);
+  graphics_draw_rect(c, GRect(p.x, p.y, POSTCARD_WIDTH, POSTCARD_HEIGHT));
 }

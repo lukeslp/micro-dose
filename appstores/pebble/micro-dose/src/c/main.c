@@ -3,6 +3,7 @@
 #include "save.h"
 #include "postcard.h"
 #include <pebble.h>
+#include "ui_style.h"
 static Game g;
 static ReportScene scene;
 static int report_day;
@@ -14,30 +15,41 @@ static Layer *layer;
 static int w, h, choice, menu, screen = 2, sx, sy;
 static bool touch_on, touching, moved, focused = true;
 static int district = 1, front;
+static int edit_keep_top(void) { return h - PBL_IF_ROUND_ELSE(66, 46); }
 static AppTimer *tap_timer;
 static const SaveIO save_io = {persist_read_data, persist_write_data};
 static bool save(void) {
   save_failed = !save_store(&save_io, &g);
   return !save_failed;
 }
-static void text(GContext *c, const char *s, int y, int height, bool large) {
+static void words(GContext *c, const char *s, int y, int height, const char *font) {
   graphics_context_set_text_color(c, GColorWhite);
-  graphics_draw_text(c, s,
-                     fonts_get_system_font(large ? FONT_KEY_GOTHIC_24_BOLD
-                                                 : FONT_KEY_GOTHIC_18_BOLD),
-                     GRect(26, y, w - 52, height), GTextOverflowModeWordWrap,
+  int inset = PBL_IF_ROUND_ELSE(24, 8);
+  graphics_draw_text(c, s, fonts_get_system_font(font),
+                     GRect(inset, y, w - 2 * inset, height), GTextOverflowModeWordWrap,
                      GTextAlignmentCenter, NULL);
 }
+static void text(GContext *c, const char *s, int y, int height, bool large) {
+  words(c, s, y, height, large ? UI_FONT_TITLE : UI_FONT_BODY);
+}
+static void compact(GContext *c, const char *s, int y, int height) {
+  words(c, s, y, height, UI_FONT_SMALL);
+}
 static void row(GContext *c, const char *s, int y, bool on) {
-  graphics_context_set_fill_color(c, GColorBlack);
-  graphics_fill_rect(c, GRect(26, y, w - 52, 32), 5, GCornersAll);
+  int inset = PBL_IF_ROUND_ELSE(y > 180 ? 48 : 26, 8);
+  GRect bounds = GRect(inset, y, w - 2 * inset, UI_ROW_HEIGHT - 2);
+  graphics_context_set_fill_color(c, on ? GColorWhite : GColorBlack);
+  graphics_fill_rect(c, bounds, 3, GCornersAll);
   if (on) {
-    graphics_context_set_fill_color(c, GColorCyan);
-    graphics_fill_rect(c, GRect(27, y + 5, 3, 22), 0, GCornerNone);
-    graphics_context_set_stroke_color(c, GColorLightGray);
-    graphics_draw_round_rect(c, GRect(26, y, w - 52, 32), 5);
+    graphics_context_set_stroke_color(c, GColorCyan);
+    graphics_context_set_stroke_width(c, 2);
+    graphics_draw_round_rect(c, bounds, 3);
+    graphics_context_set_stroke_width(c, 1);
   }
-  text(c, s, y + 3, 28, false);
+  graphics_context_set_text_color(c, on ? GColorBlack : GColorWhite);
+  graphics_draw_text(c, s, fonts_get_system_font(UI_FONT_BODY),
+                    GRect(inset + 3, y + 1, w - 2 * inset - 6, 32),
+                    GTextOverflowModeTrailingEllipsis, GTextAlignmentCenter, NULL);
 }
 
 static void value(char *b, size_t n) {
@@ -77,7 +89,7 @@ static void value(char *b, size_t n) {
     snprintf(b, n, "Career: %s", ranks[g.rank]);
     break;
   default:
-    snprintf(b, n, "Lay low: $150\nHeat -18; takes a night");
+    snprintf(b, n, "Lay low: $150\n-18 heat / 1 night");
   }
 }
 static void draw(Layer *l, GContext *c) {
@@ -85,53 +97,52 @@ static void draw(Layer *l, GContext *c) {
   graphics_fill_rect(c, GRect(0, 0, w, h), 0, GCornerNone);
   char b[80];
   if (save_failed) {
-    text(c, "SAVE INTERRUPTED", 30, 52, true);
-    text(c, "Select to retry.\nPlay pauses until saved.", 96, 74, false);
+    text(c, "SAVE PAUSED", 30, 40, true);
+    text(c, "Select to retry.\nThis turn is still here.", 86, 88, false);
     return;
   }
   if (screen == 7) {
-    text(c, g.rank == 5 ? "EMPIRE BUILT" : "YOUR CAREER", 22, 33, true);
+    text(c, g.rank == 5 ? "EMPIRE BUILT" : "YOUR CAREER", 22, 36, true);
     snprintf(b, sizeof b, "Level %d/6: %s", g.rank + 1, ranks[g.rank]);
-    text(c, b, 60, 44, false);
+    text(c, b, 60, 52, false);
     career_goal(&g, b, sizeof b);
-    text(c, b, 108, 48, false);
-    text(c, career_reward(&g), 160, 38, false);
-    text(c, "Select to return", h - 28, 24, false);
+    text(c, b, 112, 62, false);
+    compact(c, career_reward(&g), 177, 38);
+    compact(c, "Select: return", h - 24, 24);
     return;
   }
   if (screen == 2) {
     text(c, "MICRO DOSE", 18, 32, true);
     text(c,
-         "Up/Down browse.\nSelect edits or runs.\nPlan, then run a "
-         "night.\nGrow cash and cred.\nKeep heat below 100.",
-         54, 128, false);
-    text(c, "Select to begin", h - 37, 28, false);
+         "Up/Down: browse.\nSelect: edit or run.\nPlan. Run a night.\n"
+         "Grow cash & cred.\nHeat 100 ends it.", 53, 135, false);
+    compact(c, "Select: begin", h - 30, 24);
     return;
   }
   if (screen == 1) {
     text(c, "PAUSED", 20, 32, true);
     const char *r[] = {"Resume", "How to play", "New empire", "Save and exit"};
     for (int i = 0; i < 4; i++)
-      row(c, r[i], 58 + i * 34, menu == i);
+      row(c, r[i], 58 + i * UI_ROW_HEIGHT, menu == i);
     return;
   }
   if (screen == 3) {
     text(c, "Start over?", 35, 35, true);
-    text(c, "Replace your saved empire?", 80, 48, false);
+    text(c, "Replace this empire?", 80, 48, false);
     row(c, "Keep playing", 132, menu == 0);
-    row(c, "New empire", 168, menu == 1);
+    row(c, "New empire", 172, menu == 1);
     return;
   }
   if (screen == 6) {
-    text(c, "Confirm purchase", 30, 35, true);
+    text(c, "BUY THIS?", 30, 35, true);
     value(b, sizeof b);
     text(c, b, 75, 60, false);
-    row(c, "Cancel", 140, menu == 0);
+    row(c, "Cancel", 138, menu == 0);
     row(c, "Buy", 178, menu == 1);
     return;
   }
   if (screen == 5) {
-    int offset = h > 240 ? 16 : 0;
+    int offset = PBL_IF_ROUND_ELSE(16, 0);
     if (g.rank > previous_rank && g.rank == 5)
       snprintf(b, sizeof b, "EMPIRE BUILT");
     else if (g.rank > previous_rank)
@@ -140,44 +151,44 @@ static void draw(Layer *l, GContext *c) {
       snprintf(b, sizeof b, "PURCHASE");
     else
       snprintf(b, sizeof b, "NIGHT %d", report_day);
-    text(c, b, 12 + offset, 24, false);
-    postcard_draw(c, GPoint((w - 144) / 2, 42 + offset), scene, report_day);
+    compact(c, b, 1 + offset, 24);
+    postcard_draw(c, GPoint((w - POSTCARD_WIDTH) / 2, 26 + offset), scene, report_day);
     if (purchase_report) {
       if (g.rank > previous_rank) {
-        text(c, ranks[g.rank], 108 + offset, 24, false);
-        text(c, g.message, 130 + offset, 24, false);
+        text(c, ranks[g.rank], 107 + offset, 30, false);
+        compact(c, g.message, 136 + offset, 26);
       } else {
-        text(c, g.message, 110 + offset, 44, false);
+        text(c, g.message, 107 + offset, 54, false);
       }
     } else {
       if (g.rank > previous_rank) snprintf(b, sizeof b, "%s", ranks[g.rank]);
       else if (rest_report) snprintf(b, sizeof b, "Lay low: heat -18");
       else snprintf(b, sizeof b, "Sold %d / %d", g.sold, g.units);
-      text(c, b, 108 + offset, 24, false);
+      compact(c, b, 136 + offset, 24);
       snprintf(b, sizeof b, "Net %s$%ld", g.profit < 0 ? "-" : "+",
                (long)(g.profit < 0 ? -g.profit : g.profit));
-      text(c, b, 129 + offset, 30, true);
+      text(c, b, 106 + offset, 32, true);
     }
     snprintf(b, sizeof b, "Cash $%ld", (long)g.cash);
-    text(c, b, 157 + offset, 24, false);
+    text(c, b, 159 + offset, 28, false);
     snprintf(b, sizeof b, "Cred %d  Heat %d", g.cred, g.heat);
-    text(c, b, 179 + offset, 24, false);
-    text(c, g.rank == 5 ? "Select: keep playing" : "Select: continue", 201 + offset, 24, false);
+    compact(c, b, 187 + offset, 23);
+    compact(c, "Select: continue", 208 + offset, 20);
     return;
   }
   if (g.over) {
     text(c, g.over == 1 ? "CREW BROKE" : "TASK FORCE BUST", 34, 65, true);
     snprintf(b, sizeof b, "Survived %d nights\nCash $%ld", g.day, (long)g.cash);
     text(c, b, 112, 62, false);
-    text(c, "Back: new empire", h - 38, 28, false);
+    compact(c, "Back: new empire", h - 32, 24);
     return;
   }
   if (screen == 4) {
     text(c, "EDIT PLAN", 23, 34, true);
     value(b, sizeof b);
     text(c, b, 80, 65, true);
-    text(c, "Up - / Down +", 151, 30, false);
-    row(c, "Select to keep", h - 46, true);
+    compact(c, "Up - / Down +", 151, 24);
+    row(c, "Select to keep", edit_keep_top(), true);
     return;
   }
   // A compact city silhouette frames the ledger without occupying text rows.
@@ -187,14 +198,14 @@ static void draw(Layer *l, GContext *c) {
     graphics_fill_rect(c, GRect(xx, 69 - hh, 15, hh), 0, GCornerNone);
   }
   snprintf(b, sizeof b, "NIGHT %d  L%d", g.day, g.rank + 1);
-  text(c, b, 13, 24, false);
+  compact(c, b, 13, 24);
   snprintf(b, sizeof b, "$%ld", (long)g.cash);
   // Opaque central plaque keeps large cash digits distinct from the skyline.
   graphics_context_set_fill_color(c, GColorBlack);
-  graphics_fill_rect(c, GRect(w / 2 - 48, 38, 96, 32), 2, GCornersAll);
-  text(c, b, 37, 32, true);
+  graphics_fill_rect(c, GRect(w / 2 - 88, 36, 176, 36), 2, GCornersAll);
+  text(c, b, 34, 38, true);
   snprintf(b, sizeof b, "Cred %d   Heat %d", g.cred, g.heat);
-  text(c, b, 72, 23, false);
+  compact(c, b, 74, 23);
   int barw = (w - 70) / 2;
   for (int k = 0; k < 2; k++) {
     int xx = 30 + k * (barw + 10), v = k ? g.heat : g.cred;
@@ -210,16 +221,16 @@ static void draw(Layer *l, GContext *c) {
   }
   snprintf(b, sizeof b, "%s / %s\n%s", vibes[g.vibe], flows[g.flow],
            events[g.event]);
-  text(c, b, 106, 43, false);
+  compact(c, b, 107, 42);
   graphics_context_set_stroke_color(c, GColorLightGray);
-  graphics_draw_round_rect(c, GRect(26, 151, w - 52, 47), 4);
+  graphics_draw_round_rect(c, GRect(PBL_IF_ROUND_ELSE(24, 7), 150, w - PBL_IF_ROUND_ELSE(48, 14), 51), 3);
   graphics_context_set_fill_color(c, GColorCyan);
-  graphics_fill_rect(c, GRect(28, 156, 3, 36), 0, GCornerNone);
+  graphics_fill_rect(c, GRect(PBL_IF_ROUND_ELSE(26, 9), 156, 3, 39), 0, GCornerNone);
   value(b, sizeof b);
-  text(c, b, 153, 43, false);
+  text(c, b, 150, 50, false);
   snprintf(b, sizeof b, h > 240 ? "%d/9  Select" : "%d/9  Up/Down  Select",
            choice + 1);
-  text(c, b, h - (h > 240 ? 45 : 28), 23, false);
+  compact(c, b, h - (h > 240 ? 45 : 25), 23);
 }
 static void refresh(void) {
   if (!layer) return;
@@ -412,17 +423,17 @@ static void touch(const TouchEvent *e, void *x) {
       return;
     if (save_failed || screen == 2 || screen == 5 || screen == 7)
       action(1);
-    else if (screen == 1 && sy >= 58 && sy < 194) {
-      menu = (sy - 58) / 34;
+    else if (screen == 1 && sy >= 58 && sy < 58 + 4 * UI_ROW_HEIGHT) {
+      menu = (sy - 58) / UI_ROW_HEIGHT;
       action(1);
-    } else if (screen == 3 && sy >= 132 && sy < 200) {
-      menu = sy >= 168;
+    } else if (screen == 3 && sy >= 132 && sy < 210) {
+      menu = sy >= 172;
       action(1);
-    } else if (screen == 6 && sy >= 140 && sy < 210) {
+    } else if (screen == 6 && sy >= 138 && sy < 216) {
       menu = sy >= 178;
       action(1);
     } else if (screen == 4) {
-      if (sy >= h - 46)
+      if (sy >= edit_keep_top())
         action(1);
       else if (sy >= 75)
         action(sx < w / 2 ? 0 : 2);

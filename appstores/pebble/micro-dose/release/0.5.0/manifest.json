@@ -1,0 +1,11 @@
+{
+  "name": "micro-dose",
+  "version": "0.5.0",
+  "uuid": "019023c6-f7ee-470b-bd83-83a849974d80",
+  "pbwSHA256": "57ede93a09c8e8f1d32a3b6e3fccd3ed6e808cd1c472afd1aa6d6761b54c7e6d",
+  "validation": "Native emulators on firmware 4.33.2 only; physical watches unverified.",
+  "targets": [
+    "emery",
+    "gabbro"
+  ]
+}

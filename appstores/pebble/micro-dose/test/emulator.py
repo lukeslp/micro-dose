@@ -166,7 +166,8 @@ def run(platform):
         button('Select');expect(screen=4)
         touch([(width*3//4,100)])
         grab('edit')
-        button('Select');expect(screen=0)
+        touch([(width//2, height - (66 if platform == 'gabbro' else 46) + 18)])
+        expect(screen=0)
         for _ in range(3): button('Up')
         expect(choice=6)
         button('Select');expect(screen=5,day=2)
@@ -184,8 +185,9 @@ def run(platform):
         grab('purchase')
         button('Select');expect(screen=0,cash=before['cash'])
         button('Back');expect(screen=1);grab('pause')
-        button('Down');button('Down');button('Select')
-        expect(screen=3);grab('confirm');button('Select');expect(screen=0)
+        touch([(width//2, 58 + 2 * 38 + 18)])
+        expect(screen=3);grab('confirm')
+        touch([(width//2, 132 + 18)]);expect(screen=0)
         # A denied purchase must show its actual message, never expansion art.
         button('Select');expect(screen=4)
         button('Select');expect(screen=6)
@@ -232,6 +234,7 @@ def run(platform):
         button('Select');expect(screen=7);grab('career')
         button('Select');expect(screen=0)
         button('Down');expect(choice=8)
+        grab('lay-low-plan')
         before=current()
         button('Select');expect(screen=5,day=before['day']+1,cash=before['cash']-150,
                                 heat=max(0,before['heat']-18),rank=1)
@@ -244,7 +247,7 @@ def run(platform):
         time.sleep(.8)
         expect(screen=0,rank=1,earned=before['earned'],cash=before['cash'])
         assert not any('fault' in x.lower() or 'crash' in x.lower() for x in logs)
-        report={'platform':platform,'sdk':SDK_VERSION,'pbwSHA256':installed_sha,'passed':True,'checks':['launch','help','edit plan','run night and report','save and relaunch','touch edit','cancel purchase','cancel reset','denied purchase report','completed-night numbering','repeated illustrated reports','touch report dismissal','terminal report','earned promotion','career objectives','lay low cost and heat','rank and earnings resume'],'frames':frames,'logs':logs}
+        report={'platform':platform,'sdk':SDK_VERSION,'pbwSHA256':installed_sha,'passed':True,'checks':['launch','help','edit plan','run night and report','save and relaunch','touch edit and enlarged keep row','enlarged menu and confirmation touch rows','cancel purchase','cancel reset','denied purchase report','completed-night numbering','repeated illustrated reports','touch report dismissal','terminal report','earned promotion','career objectives','lay low cost and heat','rank and earnings resume'],'frames':frames,'logs':logs}
         (out/f'{platform}-report.json').write_text(json.dumps(report,indent=2))
         print('PASS',platform)
     finally:

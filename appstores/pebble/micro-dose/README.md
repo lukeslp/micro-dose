@@ -1,8 +1,10 @@
 # Micro Dose Syndicate for Pebble
 
-By Luke Steuber. Native testing build 0.4.1.
+By Luke Steuber. Native testing build 0.5.0.
 
-A fictional calculator-era economy adapted for Pebble. The dashboard has a city silhouette, a large cash plaque, labeled credibility/heat meters and an outlined setting card with an accent tab. Menus use an accent tab and outline to identify selection. Version 0.4.0 adds a career campaign and a deliberate way to reduce heat. Read the night's intel, set price, quantity, quality and distribution, then run the night. Grow cash and credibility while keeping heat below 100. Negative cash ends the run; heat at 100 brings a bust.
+A fictional calculator-era economy adapted for Pebble. Read the night's intel, set price, quantity, quality and distribution, then run the night. Grow cash and credibility while keeping heat below 100. Negative cash ends the run; heat at 100 brings a bust.
+
+Version 0.5.0 brings the ledger closer: 24 bold text for actions and prose, 28 bold headings and cash, and a minimum of 18 bold for compact statistics. Selected actions use black text on white; labeled meters and outlined cards remain readable without relying on color. The larger 38-pixel action rows share their bounds with touch input. Reports retain the night result, sales, cash and heat on one screen around a larger city illustration. The economy, saved campaigns and number of steps are unchanged.
 
 - Up/Down browse Price, Cook, Quality, Lane, District, Front, Run night, Career, and Lay low.
 - Select opens a setting. Up/Down adjust it; Select returns to the dashboard. Back also leaves the editor with its current values.
@@ -37,7 +39,7 @@ Source: this repository's `game.js`, starting at `7a13b01`. No real substance-pr
 
 ## Illustrated reports
 
-Each completed night shows a 144 by 64 pixel city postcard: quiet rooftops, a bright shop and bicycle, rain and shutters, a patrol car and barricade, a club queue, an empty loading dock, or a boarded shop after bankruptcy. Successful purchases show scaffolding and a key. Failed purchases retain their actual message and a quiet scene.
+Each completed night shows a 180 by 80 pixel city postcard: quiet rooftops, a bright shop and bicycle, rain and shutters, a patrol car and barricade, a club queue, an empty loading dock, or a boarded shop after bankruptcy. Foreground subjects are 25 percent larger than before; the background keeps native pixels. Successful purchases show scaffolding and a key. Failed purchases retain their actual message and a quiet scene.
 
 The report uses the completed night, not tomorrow's forecast. Bust and bankruptcy take priority, then high/rising heat, losses, shortages, nightlife and strong profits. Cosmetic variation never advances the economy random generator. Drawings provide shape cues alongside color. Art is bundled offline and released from memory when leaving a report.
 
@@ -58,9 +60,9 @@ Run `test/emulator.py emery` and `test/emulator.py gabbro` with pebble-tool's Py
 
 Targets: Pebble Time 2 (`emery`, 200 by 228) and Pebble Round 2 (`gabbro`, 260 by 260). Native C; no phone code, network access, or account required. Touch subscription is enabled only on firmware 4.33.2 or newer. Buttons provide all game actions.
 
-Native emulator validation uses firmware 4.33.2. Older firmware and physical watches are unverified. The firmware check alone does not prove compatibility with an older app loader. Physical touch accuracy, readability and battery behavior need device testing. Luke's separate Hexsweeper launch failure is unresolved; these packages are testing builds, not a claim that the watch connection or launch issue has been fixed.
+Native emulator validation uses firmware 4.33.2. Older firmware and physical watches are unverified. Physical touch accuracy, readability under room light and battery behavior still need device testing.
 
-Packaged artifacts live under `release/0.4.0/`, including PBW, standalone native source, screenshots, reports and SHA-256 sums. Version 0.2.0 has an Unlisted store draft. Version 0.4.0 is staged locally.
+Packaged artifacts live under `release/0.5.0/`, including PBW, standalone native source, screenshots, reports and SHA-256 sums. This candidate is staged locally; older release packages remain available.
 
 
 The native campaign suite (`test/native_campaign.py emery` and `gabbro`, using
@@ -69,11 +71,11 @@ It buys properties with earned cash, lowers heat through Lay low, checks campaig
 and property resume, and continues playing after Empire. Packaging requires both
 the basic interaction suite and this campaign suite for each target and exact PBW.
 
-Both native suites pass on both watch shapes for the exact 0.4.0 PBW. Purchase-triggered promotions show the new rank, and the final promotion says Empire built.
+Purchase-triggered promotions show the new rank, and the final promotion says Empire built.
 
 Version 0.4.1 ignores button and touch actions while another screen has focus.
 Losing focus cancels an in-progress gesture; unloading also cancels its timer
 and clears the drawing layer reference. This keeps delayed input from acting
 on a hidden or destroyed game screen. The save format, app identity and economy
-rules are unchanged. It is a local testing candidate; physical focus transitions
+rules are unchanged. These protections remain in 0.5.0; physical focus transitions
 still need watch testing.
