@@ -1,0 +1,21 @@
+{
+  "name": "Micro Dose",
+  "version": "0.4.1",
+  "appId": "0e8d7ac981644076ac833e25",
+  "visibility": "Published",
+  "releaseState": "Published",
+  "publicURL": "https://apps.repebble.com/0e8d7ac981644076ac833e25",
+  "downloadURL": "https://appstore-api.repebble.com/api/assets/pbw/0e8d7ac981644076ac833e25/0.4.1/8725df47-6f3d-410f-9817-456c00b949c5.pbw",
+  "pbwSHA256": "6285a580616f1ef372df74e5ce66d4d667f401f4e11eb1795b4bc5df757f56f5",
+  "publicDownloadVerified": true,
+  "httpStatus": 200,
+  "bytes": 50431,
+  "targets": [
+    "emery",
+    "gabbro"
+  ],
+  "verifiedAt": "2026-09-11T05:14:09.147705+00:00",
+  "physicalValidation": "Not performed; prior physical crash attribution remains open",
+  "verification": "Dashboard Published, public title/version/targets inspected, unauthenticated download matches the frozen tested PBW.",
+  "listingChanges": "Preserved owner description, title and existing 0.4.0 media; focus guard does not change game graphics."
+}
