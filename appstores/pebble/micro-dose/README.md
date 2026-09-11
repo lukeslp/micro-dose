@@ -1,6 +1,6 @@
 # Micro Dose Syndicate for Pebble
 
-By Luke Steuber. Native testing build 0.4.0.
+By Luke Steuber. Native testing build 0.4.1.
 
 A fictional calculator-era economy adapted for Pebble. The dashboard has a city silhouette, a large cash plaque, labeled credibility/heat meters and an outlined setting card with an accent tab. Menus use an accent tab and outline to identify selection. Version 0.4.0 adds a career campaign and a deliberate way to reduce heat. Read the night's intel, set price, quantity, quality and distribution, then run the night. Grow cash and credibility while keeping heat below 100. Negative cash ends the run; heat at 100 brings a bust.
 
@@ -70,3 +70,10 @@ and property resume, and continues playing after Empire. Packaging requires both
 the basic interaction suite and this campaign suite for each target and exact PBW.
 
 Both native suites pass on both watch shapes for the exact 0.4.0 PBW. Purchase-triggered promotions show the new rank, and the final promotion says Empire built.
+
+Version 0.4.1 ignores button and touch actions while another screen has focus.
+Losing focus cancels an in-progress gesture; unloading also cancels its timer
+and clears the drawing layer reference. This keeps delayed input from acting
+on a hidden or destroyed game screen. The save format, app identity and economy
+rules are unchanged. It is a local testing candidate; physical focus transitions
+still need watch testing.

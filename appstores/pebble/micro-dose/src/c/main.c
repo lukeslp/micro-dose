@@ -12,7 +12,7 @@ static bool save_failed;
 static Window *win;
 static Layer *layer;
 static int w, h, choice, menu, screen = 2, sx, sy;
-static bool touch_on, touching, moved;
+static bool touch_on, touching, moved, focused = true;
 static int district = 1, front;
 static AppTimer *tap_timer;
 static const SaveIO save_io = {persist_read_data, persist_write_data};
@@ -222,6 +222,7 @@ static void draw(Layer *l, GContext *c) {
   text(c, b, h - (h > 240 ? 45 : 28), 23, false);
 }
 static void refresh(void) {
+  if (!layer) return;
   APP_LOG(APP_LOG_LEVEL_INFO, "MD assets territories=%d fronts=%d", g.territories, g.fronts);
   APP_LOG(APP_LOG_LEVEL_INFO, "MD career rank=%d earned=%ld good=%lu quiet=%lu",
           g.rank, (long)g.earned, (unsigned long)g.good_nights, (unsigned long)g.quiet_nights);
@@ -240,6 +241,7 @@ static int adjust(int v, int d, int lo, int hi) {
   return v < lo ? lo : v > hi ? hi : v;
 }
 static void action(int b) {
+  if (!focused || !layer) return;
   if (save_failed) {
     if (b == 1) save();
     refresh();
@@ -392,6 +394,7 @@ static void expire(void *x) {
   touching = false;
 }
 static void touch(const TouchEvent *e, void *x) {
+  if (!focused || !layer) return;
   if (e->type == TouchEvent_Touchdown) {
     cancel_tap();
     sx = e->x;
@@ -432,6 +435,7 @@ static void touch(const TouchEvent *e, void *x) {
   }
 }
 static void focus(bool active) {
+  focused = active;
   cancel_tap();
   if (!active)
     save();
@@ -445,7 +449,7 @@ static void load(Window *x) {
   layer_add_child(window_get_root_layer(x), layer);
   refresh();
 }
-static void unload(Window *x) { layer_destroy(layer); }
+static void unload(Window *x) { cancel_tap(); layer_destroy(layer); layer = NULL; }
 int main(void) {
   game_init(&g, (uint32_t)time(NULL));
   if (save_load(&save_io, &g)) screen = 0;
