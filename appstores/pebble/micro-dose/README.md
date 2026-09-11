@@ -64,7 +64,7 @@ Targets: Pebble Time 2 (`emery`, 200 by 228) and Pebble Round 2 (`gabbro`, 260 b
 
 Native emulator validation uses firmware 4.33.2. Older firmware and physical watches are unverified. Physical touch accuracy, readability under room light and battery behavior still need device testing.
 
-Packaged artifacts live under `release/0.5.1/`, including PBW, standalone native source, screenshots, reports and SHA-256 sums. This candidate is staged locally; older release packages remain available.
+Packaged artifacts live under `release/0.5.1/`, including PBW, standalone native source, screenshots, reports and SHA-256 sums. [Micro Dose 0.5.1](https://apps.repebble.com/0e8d7ac981644076ac833e25) is public; its Store download matches the frozen PBW. See the [publication receipt](store/0.5.1/publication.json). Older release packages remain available.
 
 
 The native campaign suite (`test/native_campaign.py emery` and `gabbro`, using

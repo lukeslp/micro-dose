@@ -1,0 +1,50 @@
+{
+  "title": "Micro Dose",
+  "slug": "micro-dose",
+  "version": "0.5.1",
+  "pbw": "appstores/pebble/micro-dose/release/0.5.1/micro-dose-0.5.1.pbw",
+  "pbwSHA256": "2f0902ac952ce8ca49d120402e3c62e244a55347a10a3216b87103d30a3bb5c9",
+  "uuid": "019023c6-f7ee-470b-bd83-83a849974d80",
+  "targets": [
+    "emery",
+    "gabbro"
+  ],
+  "release": "appstores/pebble/micro-dose/release/0.5.1",
+  "appId": "0e8d7ac981644076ac833e25",
+  "media": "appstores/pebble/micro-dose/store/0.5.1",
+  "releaseNotes": "Larger text and nightly illustrations make the city easier to read. The pause menu now includes About, with a small portrait of Luke; your campaign and career progress carry forward.",
+  "sources": {
+    "appstores/pebble/micro-dose/release/0.5.1/emery-map.png": "97cdaa4b7e7304a762297ed5c43323e1e5caf93b0195b3b57461eabd4c400fe4",
+    "appstores/pebble/micro-dose/release/0.5.1/emery-edit.png": "d45c6b623c2ec319fa2eed91d4088c76489609d74c3882c13415f9beed55e7da",
+    "appstores/pebble/micro-dose/release/0.5.1/emery-report.png": "b48491e7209f66a0441f80f1625799291b8345ce62a6e10afcd87664699c4293",
+    "appstores/pebble/micro-dose/release/0.5.1/emery-career.png": "2046ff6e00daee0ad8cdf4a1153adf182a47082c27a2ab8cd84492ddc6b44a49",
+    "appstores/pebble/micro-dose/release/0.5.1/emery-about.png": "b5f65aab99098c58036caeb8404bc6fa67c505f4025eade7ef237ad72f951ad7",
+    "appstores/pebble/micro-dose/release/0.5.1/gabbro-map.png": "2c7f63138ad2f0c1cea66a7f30e10534e3a53c344967094ff3d0c41b953b36dd",
+    "appstores/pebble/micro-dose/release/0.5.1/gabbro-edit.png": "512ec1d7c4697b63e918334ece7db8d44ccbd8c66bcd60f5fc7e7840391daaf8",
+    "appstores/pebble/micro-dose/release/0.5.1/gabbro-report.png": "096504f848cdd7dfd74fb847559a0e3c90bc424b2382320ef925838afea21285",
+    "appstores/pebble/micro-dose/release/0.5.1/gabbro-career.png": "d8186c886c16c8063d33d6b4241effa3dcabdd9c357825dc451702173fc201cf",
+    "appstores/pebble/micro-dose/release/0.5.1/gabbro-about.png": "84e600fcb5285fb2f4ce0b08c6120eb14a7fba61504aaa33ebb6693a661639c4"
+  },
+  "appstoreURL": "https://apps.repebble.com/0e8d7ac981644076ac833e25",
+  "pbwDownloadURL": "https://appstore-api.repebble.com/api/assets/pbw/0e8d7ac981644076ac833e25/0.5.1/0aa647ba-f776-4e1a-a086-9cf33d2d4dc3.pbw",
+  "publicDownloadSHA256": "2f0902ac952ce8ca49d120402e3c62e244a55347a10a3216b87103d30a3bb5c9",
+  "verifiedAt": "2026-09-11T06:56:00.141247+00:00",
+  "visibility": "Published",
+  "releaseState": "Published",
+  "physicalValidation": "Not performed; exact packages passed native emulator checks on both targets.",
+  "savedMedia": {
+    "emery": {
+      "screenshots": 5,
+      "primaryGIF": "https://developer.repebble.com/api/assets/screenshots/0e8d7ac981644076ac833e25/emery/0203f937-72fd-48ef-bc3d-0ad9782d00d3.gif",
+      "banner": "https://developer.repebble.com/api/assets/banners/0e8d7ac981644076ac833e25/emery/f0aa6135-6125-41f2-b26d-caf62107c27e.png"
+    },
+    "gabbro": {
+      "screenshots": 5,
+      "primaryGIF": "https://developer.repebble.com/api/assets/screenshots/0e8d7ac981644076ac833e25/gabbro/2cb010e3-ee23-48c6-b784-928a1abf88da.gif",
+      "banner": "https://developer.repebble.com/api/assets/banners/0e8d7ac981644076ac833e25/gabbro/a71ddece-67de-44fe-9dd3-e4d6f538f4a1.png"
+    }
+  },
+  "mediaVerification": "Reopened both saved target panels: five screenshots with a primary GIF and one banner per watch. GIF frames match unchanged native captures pixel for pixel.",
+  "descriptionChanges": "Owner title and description preserved.",
+  "physicalWatchValidated": false
+}
