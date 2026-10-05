@@ -1,0 +1,17 @@
+{
+  "name": "micro-dose",
+  "version": "0.5.2",
+  "uuid": "019023c6-f7ee-470b-bd83-83a849974d80",
+  "pbwSHA256": "db6ea103e28b785d14f7f9b2bbcaa453c24dcac7da2c282ba3fe0b92df71fd8c",
+  "validation": "Native emulators on firmware 4.33.2 only; physical watches unverified.",
+  "targets": [
+    "emery",
+    "gabbro"
+  ],
+  "portableBuild": "passed",
+  "sourceZip": "micro-dose-0.5.2-source.zip",
+  "sourceZipSHA256": "7d288f122ebea08af4f6499bee5e37a4890b5b4e5bed5ce11a37249152189f69",
+  "pbw": "micro-dose-0.5.2.pbw",
+  "physicalAcceptance": "Not performed",
+  "storePublication": "Not performed"
+}

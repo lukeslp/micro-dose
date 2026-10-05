@@ -1,0 +1,19 @@
+{
+  "sdk": "4.33.1",
+  "sourceZipSHA256": "7d288f122ebea08af4f6499bee5e37a4890b5b4e5bed5ce11a37249152189f69",
+  "productionPBWSHA256": "db6ea103e28b785d14f7f9b2bbcaa453c24dcac7da2c282ba3fe0b92df71fd8c",
+  "targets": {
+    "emery": {
+      "codeIdenticalOutsideCRCResourceTimestampAndGNUBuildID": true,
+      "resourcesIdentical": true
+    },
+    "gabbro": {
+      "codeIdenticalOutsideCRCResourceTimestampAndGNUBuildID": true,
+      "resourcesIdentical": true
+    }
+  },
+  "result": "passed",
+  "hostTestsPassed": true,
+  "independentPBWSHA256": "4cc349b28e701dceac38c2272fdb57dd7e10851a9717804ea0905cd8bbaa25a7",
+  "verifiedAt": "2026-10-05T04:27:59.737707+00:00"
+}

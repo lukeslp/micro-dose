@@ -162,14 +162,18 @@ def run(platform):
     selected = [1,0]
     promoted = {0}
     def choose(index):
-        while current()['choice'] != index: button('Down')
+        expect(screen=0)
+        while current()['choice'] != index:
+            touch([(width*3//4,height-(45 if platform=='gabbro' else 25)+11)])
+    def open_plan():
+        touch([(width//2,175)])
     def promotion():
         rank = current()['rank']
         if rank not in promoted:
             promoted.add(rank); grab(f'promotion-{rank+1}')
             print(f'CAREER rank {rank+1}',flush=True)
     def dismiss():
-        expect(screen=5,over=0); promotion(); button('Select'); expect(screen=0)
+        expect(screen=5,over=0); promotion(); touch([(width//2,height//2)]); expect(screen=0)
     def restart():
         before=current()
         watch.send_packet(AppRunState(data=AppRunStateStop(uuid=APP)));time.sleep(.5)
@@ -187,11 +191,12 @@ def run(platform):
         if not options: return
         item=min(options,key=lambda i:costs[i]);price=costs[item]
         if state['cash'] < price+1000: return
-        choose(4+kind);button('Select');expect(screen=4)
+        choose(4+kind);open_plan();expect(screen=4)
         while selected[kind]!=item:
             button('Down')
             selected[kind]=(selected[kind]+1)%4 if kind else 1+selected[kind]%5
-        button('Select');expect(screen=6);button('Down');button('Select')
+        touch([(width//2,height-(66 if platform=='gabbro' else 46)+18)]);expect(screen=6)
+        touch([(width//2,178+18)])
         expect(cash=state['cash']-price,**{'fronts' if kind else 'territories':owned|(1<<item)})
         dismiss()
     try:
@@ -199,14 +204,14 @@ def run(platform):
         AppInstaller(watch,str(PBW)).install()
         watch.send_packet(AppRunState(data=AppRunStateStart(uuid=APP)));time.sleep(1)
         expect(screen=2);button('Select');expect(rank=0,day=1)
-        choose(1);button('Select')
+        choose(1);open_plan()
         for _ in range(3):button('Up') # Default 30 units becomes 15.
         button('Select')
         resumed=False
         for night in range(400):
             if current()['rank']==5:break
             day=current()['day'];choose(8 if current()['heat']>45 else 6)
-            button('Select');expect(day=day+1,over=0);dismiss()
+            open_plan();expect(day=day+1,over=0);dismiss()
             invest(0);invest(1)
             if current()['rank']>=3 and not resumed:
                 restart();resumed=True;grab('career-resume')
@@ -214,11 +219,11 @@ def run(platform):
         choose(7);button('Select');expect(screen=7);grab('empire-career')
         button('Select');restart();expect(rank=5)
         day=current()['day'];choose(8 if current()['heat']>45 else 6)
-        button('Select');expect(day=day+1,rank=5,over=0);grab('after-empire');dismiss()
+        open_plan();expect(day=day+1,rank=5,over=0);grab('after-empire');dismiss()
         assert hashlib.sha256(PBW.read_bytes()).hexdigest()==installed_sha
         assert not any('fault' in line.lower() or 'crash' in line.lower() for line in logs)
         report={'platform':platform,'pbwSHA256':installed_sha,'passed':True,'sdk':SDK_VERSION,
-                'checks':['all six career levels','earned property purchases','heat recovery',
+                'checks':['touch navigation and plan controls across a complete campaign','all six career levels','earned property purchases','heat recovery',
                           'career and property resume','Empire goal','play continues after Empire'],
                 'frames':frames,'logs':logs}
         (out/f'{platform}-report.json').write_text(json.dumps(report,indent=2))

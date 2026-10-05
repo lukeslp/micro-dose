@@ -27,7 +27,7 @@ shutil.copy2(root / "README.md", out / "README.md")
 with zipfile.ZipFile(out / (name + "-" + version + "-source.zip"), "w", zipfile.ZIP_DEFLATED) as archive:
     for path in sorted(root.rglob("*")):
         rel = path.relative_to(root)
-        if path.is_file() and (rel.parts[0] in ("src", "test", "tools", "resources") or str(rel) in ("package.json", "wscript", "README.md", ".gitignore")) and "__pycache__" not in rel.parts:
+        if path.is_file() and (rel.parts[0] in ("src", "test", "tools", "resources") or str(rel) in ("package.json", "wscript", "README.md", "LICENSE", ".gitignore")) and "__pycache__" not in rel.parts:
             archive.write(path, name + "/" + str(rel))
 for suite, report_path, report in reports:
     platform = report["platform"]

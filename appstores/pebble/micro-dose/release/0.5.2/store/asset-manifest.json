@@ -1,0 +1,210 @@
+{
+  "slug": "micro-dose",
+  "version": "0.5.2",
+  "pbwSHA256": "db6ea103e28b785d14f7f9b2bbcaa453c24dcac7da2c282ba3fe0b92df71fd8c",
+  "sourceZipSHA256": "7d288f122ebea08af4f6499bee5e37a4890b5b4e5bed5ce11a37249152189f69",
+  "listingSHA256": "5bf1c3ffafd01e384a820275094b7ad7fb6a72bb5cd7d9e6777bc01397e66d7b",
+  "screenshotCount": 10,
+  "bannerCount": 2,
+  "iconCount": 2,
+  "preparedAt": "2026-10-05T04:32:29.376577+00:00",
+  "exampleData": "Native phone fixtures use synthetic readings for data faces; screenshots are unchanged.",
+  "media": [
+    {
+      "path": "screenshots/emery_map.png",
+      "role": "native screenshot",
+      "platform": "emery",
+      "state": "map",
+      "dimensions": [
+        200,
+        228
+      ],
+      "sha256": "4d68534a8a615f44f2a2cb82c891ea8e5e4f345112d57d12b655cd3bc613571c",
+      "source": "emery-map.png",
+      "sourceSHA256": "4d68534a8a615f44f2a2cb82c891ea8e5e4f345112d57d12b655cd3bc613571c",
+      "unmodified": true
+    },
+    {
+      "path": "screenshots/emery_edit.png",
+      "role": "native screenshot",
+      "platform": "emery",
+      "state": "edit",
+      "dimensions": [
+        200,
+        228
+      ],
+      "sha256": "cedc8f7dc831137adc6573f111165a3c3a0ea43a7d0a3a0351153c583f1c5f53",
+      "source": "emery-edit.png",
+      "sourceSHA256": "cedc8f7dc831137adc6573f111165a3c3a0ea43a7d0a3a0351153c583f1c5f53",
+      "unmodified": true
+    },
+    {
+      "path": "screenshots/emery_report.png",
+      "role": "native screenshot",
+      "platform": "emery",
+      "state": "report",
+      "dimensions": [
+        200,
+        228
+      ],
+      "sha256": "bbc845c0ade4cafea8b5e675fcb82c69066001e256266114ba1ff6d9497fabb0",
+      "source": "emery-report.png",
+      "sourceSHA256": "bbc845c0ade4cafea8b5e675fcb82c69066001e256266114ba1ff6d9497fabb0",
+      "unmodified": true
+    },
+    {
+      "path": "screenshots/emery_pause.png",
+      "role": "native screenshot",
+      "platform": "emery",
+      "state": "pause",
+      "dimensions": [
+        200,
+        228
+      ],
+      "sha256": "e6b81a0dc04290674c54c89f14bd469bfb10614c034e20ba2ca661fbf22d64d3",
+      "source": "emery-pause.png",
+      "sourceSHA256": "e6b81a0dc04290674c54c89f14bd469bfb10614c034e20ba2ca661fbf22d64d3",
+      "unmodified": true
+    },
+    {
+      "path": "screenshots/emery_career.png",
+      "role": "native screenshot",
+      "platform": "emery",
+      "state": "career",
+      "dimensions": [
+        200,
+        228
+      ],
+      "sha256": "2046ff6e00daee0ad8cdf4a1153adf182a47082c27a2ab8cd84492ddc6b44a49",
+      "source": "emery-career.png",
+      "sourceSHA256": "2046ff6e00daee0ad8cdf4a1153adf182a47082c27a2ab8cd84492ddc6b44a49",
+      "unmodified": true
+    },
+    {
+      "path": "banners/emery.png",
+      "role": "banner",
+      "platform": "emery",
+      "state": "map",
+      "dimensions": [
+        720,
+        320
+      ],
+      "sha256": "be51f44aca2a45156ef98d1285d033c242237ca03826476ac9403e85f5f65bf1",
+      "source": "emery-map.png",
+      "sourceSHA256": "4d68534a8a615f44f2a2cb82c891ea8e5e4f345112d57d12b655cd3bc613571c",
+      "unmodified": false
+    },
+    {
+      "path": "screenshots/gabbro_map.png",
+      "role": "native screenshot",
+      "platform": "gabbro",
+      "state": "map",
+      "dimensions": [
+        260,
+        260
+      ],
+      "sha256": "6ceca11ff904febbb5dbe98fb0b20c495adf1045bb6e9ce6c13474b809ec73d4",
+      "source": "gabbro-map.png",
+      "sourceSHA256": "6ceca11ff904febbb5dbe98fb0b20c495adf1045bb6e9ce6c13474b809ec73d4",
+      "unmodified": true
+    },
+    {
+      "path": "screenshots/gabbro_edit.png",
+      "role": "native screenshot",
+      "platform": "gabbro",
+      "state": "edit",
+      "dimensions": [
+        260,
+        260
+      ],
+      "sha256": "7be108d67a4652ac82365c329dbed1ee908b606c46041387f0d9c29cb51e6fd6",
+      "source": "gabbro-edit.png",
+      "sourceSHA256": "7be108d67a4652ac82365c329dbed1ee908b606c46041387f0d9c29cb51e6fd6",
+      "unmodified": true
+    },
+    {
+      "path": "screenshots/gabbro_report.png",
+      "role": "native screenshot",
+      "platform": "gabbro",
+      "state": "report",
+      "dimensions": [
+        260,
+        260
+      ],
+      "sha256": "900bb74a38be9033ac5a581e60fee07231d211ecd1197e4f591754287cfe6133",
+      "source": "gabbro-report.png",
+      "sourceSHA256": "900bb74a38be9033ac5a581e60fee07231d211ecd1197e4f591754287cfe6133",
+      "unmodified": true
+    },
+    {
+      "path": "screenshots/gabbro_pause.png",
+      "role": "native screenshot",
+      "platform": "gabbro",
+      "state": "pause",
+      "dimensions": [
+        260,
+        260
+      ],
+      "sha256": "2801eba80f298478800ded2e9bb9d5465779fdd1a3dadfa16223815728d73292",
+      "source": "gabbro-pause.png",
+      "sourceSHA256": "2801eba80f298478800ded2e9bb9d5465779fdd1a3dadfa16223815728d73292",
+      "unmodified": true
+    },
+    {
+      "path": "screenshots/gabbro_career.png",
+      "role": "native screenshot",
+      "platform": "gabbro",
+      "state": "career",
+      "dimensions": [
+        260,
+        260
+      ],
+      "sha256": "d8186c886c16c8063d33d6b4241effa3dcabdd9c357825dc451702173fc201cf",
+      "source": "gabbro-career.png",
+      "sourceSHA256": "d8186c886c16c8063d33d6b4241effa3dcabdd9c357825dc451702173fc201cf",
+      "unmodified": true
+    },
+    {
+      "path": "banners/gabbro.png",
+      "role": "banner",
+      "platform": "gabbro",
+      "state": "map",
+      "dimensions": [
+        720,
+        320
+      ],
+      "sha256": "d16072fc9d0145450a5f12c5558973c9e9261e642566b9afa7ba9e456b6c20e8",
+      "source": "gabbro-map.png",
+      "sourceSHA256": "6ceca11ff904febbb5dbe98fb0b20c495adf1045bb6e9ce6c13474b809ec73d4",
+      "unmodified": false
+    },
+    {
+      "path": "icons/list-80.png",
+      "role": "list icon",
+      "platform": "emery",
+      "state": "map",
+      "dimensions": [
+        80,
+        80
+      ],
+      "sha256": "f0e2eda9505edf8eb5baf7b5e85bb6bdd0dcfd47073456b136326c46a4b2e0f3",
+      "source": "emery-map.png",
+      "sourceSHA256": "4d68534a8a615f44f2a2cb82c891ea8e5e4f345112d57d12b655cd3bc613571c",
+      "unmodified": false
+    },
+    {
+      "path": "icons/list-144.png",
+      "role": "list icon",
+      "platform": "emery",
+      "state": "map",
+      "dimensions": [
+        144,
+        144
+      ],
+      "sha256": "cfe0a8dfdb0669e1da456ab27f0fd1981d5762ec35b5adba95f9caf00c955126",
+      "source": "emery-map.png",
+      "sourceSHA256": "4d68534a8a615f44f2a2cb82c891ea8e5e4f345112d57d12b655cd3bc613571c",
+      "unmodified": false
+    }
+  ]
+}

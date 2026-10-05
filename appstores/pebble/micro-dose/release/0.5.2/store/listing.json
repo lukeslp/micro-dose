@@ -1,0 +1,40 @@
+{
+  "appId": "0e8d7ac981644076ac833e25",
+  "appUUID": "019023c6-f7ee-470b-bd83-83a849974d80",
+  "title": "Micro Dose",
+  "version": "0.5.2",
+  "previousPublishedVersion": "0.5.1",
+  "visibility": "listed",
+  "type": "watchapp",
+  "description": "Remember that drug game on your graphing calculator? ... that.\r\n\r\nA fictional calculator-era underworld economy. Read the night\u2019s forecast, set price, quantity, quality and distribution, then run the night and see what happened. \r\n\r\nClimb six career levels from Runner to Empire. Earn profits, buy districts and fronts, and unlock new distribution routes. Career shows your next unfinished goal. Lay low reduces heat while your fronts still bring in income.\r\n\r\nBuild the Empire by earning $60,000 net, owning all six districts and three fronts, and keeping heat below 60. You can keep playing afterward. Negative cash or heat at 100 ends the campaign. Up and Down browse; Select edits or acts. Progress saves automatically.\r\n\r\nFor Pebble Time 2 and Round 2. Touch requires firmware 4.33.2; button controls remain available. By Luke Steuber.",
+  "website": null,
+  "platforms": [
+    "emery",
+    "gabbro"
+  ],
+  "releaseNotes": "Touch controls follow the visible rows and buttons. Back saves changes before leaving the plan editor.",
+  "screenshots": [
+    "screenshots/emery_map.png",
+    "screenshots/emery_edit.png",
+    "screenshots/emery_report.png",
+    "screenshots/emery_pause.png",
+    "screenshots/emery_career.png",
+    "screenshots/gabbro_map.png",
+    "screenshots/gabbro_edit.png",
+    "screenshots/gabbro_report.png",
+    "screenshots/gabbro_pause.png",
+    "screenshots/gabbro_career.png"
+  ],
+  "banners": [
+    "banners/emery.png",
+    "banners/gabbro.png"
+  ],
+  "icons": {
+    "small": "icons/list-80.png",
+    "large": "icons/list-144.png"
+  },
+  "pbw": "../micro-dose-0.5.2.pbw",
+  "pbwSHA256": "db6ea103e28b785d14f7f9b2bbcaa453c24dcac7da2c282ba3fe0b92df71fd8c",
+  "ownerStateObservedAt": "2026-10-05T04:00:36.531967+00:00",
+  "state": "Prepared locally; not uploaded"
+}

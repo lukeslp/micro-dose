@@ -1,0 +1,81 @@
+PASS 10000 economies, ownership charges, bankruptcy, bust, terminal guards
+Empire campaigns: 200/200; mean nights: 76
+PASS rank boundaries, locks, quiet nights, failure guards and continued play
+PASS atomic purchases, interrupted saves, corrupt fallback, legacy assets and rank persistence
+PASS report precedence, completed-night event, heat delta, terminal scenes
+Setting top to                           : /private/var/folders/kl/6kmp_kld6hx_70h5kqwb97k00000gn/T/micro-dose-owner-portable-p18wi0_8/micro-dose 
+Setting out to                           : /private/var/folders/kl/6kmp_kld6hx_70h5kqwb97k00000gn/T/micro-dose-owner-portable-p18wi0_8/micro-dose/build 
+Checking for program 'webpack'           : /Users/luke/Library/Application Support/Pebble SDK/SDKs/4.33.1/node_modules/.bin/webpack 
+WARNING: enableMultiJS is not enabled for this project. message_keys.json will not be included in your project unless you add it to your pebble-js-app.js file. 
+Found Pebble SDK for gabbro in:          : /Users/luke/Library/Application Support/Pebble SDK/SDKs/4.33.1/sdk-core/pebble/gabbro 
+Checking for program 'gcc, cc'           : arm-none-eabi-gcc 
+Checking for program 'ar'                : arm-none-eabi-ar 
+Found Pebble SDK for emery in:           : /Users/luke/Library/Application Support/Pebble SDK/SDKs/4.33.1/sdk-core/pebble/emery 
+Checking for program 'gcc, cc'           : arm-none-eabi-gcc 
+Checking for program 'ar'                : arm-none-eabi-ar 
+'configure' finished successfully (0.163s)
+Waf: Entering directory `/private/var/folders/kl/6kmp_kld6hx_70h5kqwb97k00000gn/T/micro-dose-owner-portable-p18wi0_8/micro-dose/build'
+[1/1] Creating message_key_header:  -> build/include/message_keys.auto.h
+[ 2/20] Compiling gabbro | reso: resources/images/author.png -> build/gabbro/resources/images/author.png.AUTHOR_PORTRAIT.reso
+[ 3/20] Compiling gabbro | reso: resources/images/skyline.png -> build/gabbro/resources/images/skyline.png.CITY.reso
+[ 4/20] Creating gabbro | /private/var/folders/kl/6kmp_kld6hx_70h5kqwb97k00000gn/T/micro-dose-owner-portable-p18wi0_8/micro-dose/build/gabbro/appinfo.auto.c:  -> build/gabbro/appinfo.auto.c
+[ 5/20] Compiling gabbro | subst: /Users/luke/Library/Application Support/Pebble SDK/SDKs/4.33.1/sdk-core/pebble/common/pebble_app.ld.template -> build/gabbro/pebble_app.ld.auto
+[ 6/20] Compiling gabbro | c: src/c/game.c -> build/src/c/game.c.16.o
+[ 7/20] Compiling gabbro | c: src/c/report.c -> build/src/c/report.c.16.o
+[ 8/20] Compiling gabbro | c: src/c/save.c -> build/src/c/save.c.16.o
+[ 9/20] Creating gabbro | /private/var/folders/kl/6kmp_kld6hx_70h5kqwb97k00000gn/T/micro-dose-owner-portable-p18wi0_8/micro-dose/build/appinfo.json:  -> build/appinfo.json
+[10/20] Processing gabbro | resource_ball: build/gabbro/resources/images/skyline.png.CITY.reso build/gabbro/resources/images/author.png.AUTHOR_PORTRAIT.reso -> build/gabbro/system_resources.resball
+[11/20] Compiling gabbro | generate_resource_id_definitions: build/gabbro/system_resources.resball -> build/gabbro/src/resource_ids.auto.c
+[12/20] Compiling gabbro | generate_pbpack: build/gabbro/system_resources.resball -> build/gabbro/app_resources.pbpack
+[13/20] Compiling gabbro | generate_resource_id_header: build/gabbro/system_resources.resball -> build/gabbro/src/resource_ids.auto.h
+[14/20] Compiling gabbro | c: build/gabbro/src/resource_ids.auto.c -> build/gabbro/src/resource_ids.auto.c.16.o
+[15/20] Compiling gabbro | c: src/c/about.c -> build/src/c/about.c.16.o
+[16/20] Compiling gabbro | c: src/c/main.c -> build/src/c/main.c.16.o
+[17/20] Compiling gabbro | c: src/c/postcard.c -> build/src/c/postcard.c.16.o
+[18/20] Compiling gabbro | c: build/gabbro/appinfo.auto.c -> build/gabbro/appinfo.auto.c.16.o
+[19/20] Linking gabbro | cprogram: build/src/c/about.c.16.o build/src/c/game.c.16.o build/src/c/main.c.16.o build/src/c/postcard.c.16.o build/src/c/report.c.16.o build/src/c/save.c.16.o build/gabbro/appinfo.auto.c.16.o build/gabbro/src/resource_ids.auto.c.16.o -> build/gabbro/pebble-app.elf
+/Users/luke/Library/Application Support/Pebble SDK/SDKs/4.33.1/toolchain/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/bin/ld: warning: /private/var/folders/kl/6kmp_kld6hx_70h5kqwb97k00000gn/T/micro-dose-owner-portable-p18wi0_8/micro-dose/build/gabbro/pebble-app.elf has a LOAD segment with RWX permissions
+
+[20/20] Processing gabbro | memory_usage_report: build/gabbro/pebble-app.elf build/gabbro/app_resources.pbpack
+-------------------------------------------------------
+GABBRO APP MEMORY USAGE
+Total size of resources:        9847 bytes / 256.0KB
+Total footprint in RAM:         17044 bytes / 128.0KB
+Free RAM available (heap):      114028 bytes
+------------------------------------------------------- 
+[21/39] Compiling emery | reso: resources/images/author.png -> build/emery/resources/images/author.png.AUTHOR_PORTRAIT.reso
+[22/39] Compiling emery | reso: resources/images/skyline.png -> build/emery/resources/images/skyline.png.CITY.reso
+[23/39] Creating emery | /private/var/folders/kl/6kmp_kld6hx_70h5kqwb97k00000gn/T/micro-dose-owner-portable-p18wi0_8/micro-dose/build/emery/appinfo.auto.c:  -> build/emery/appinfo.auto.c
+[24/39] Compiling emery | subst: /Users/luke/Library/Application Support/Pebble SDK/SDKs/4.33.1/sdk-core/pebble/common/pebble_app.ld.template -> build/emery/pebble_app.ld.auto
+[25/39] Compiling emery | c: src/c/game.c -> build/src/c/game.c.17.o
+[26/39] Compiling emery | c: src/c/report.c -> build/src/c/report.c.17.o
+[28/39] Compiling emery | c: src/c/save.c -> build/src/c/save.c.17.o
+[29/39] Processing emery | resource_ball: build/emery/resources/images/skyline.png.CITY.reso build/emery/resources/images/author.png.AUTHOR_PORTRAIT.reso -> build/emery/system_resources.resball
+[30/39] Compiling emery | generate_resource_id_definitions: build/emery/system_resources.resball -> build/emery/src/resource_ids.auto.c
+[31/39] Compiling emery | generate_pbpack: build/emery/system_resources.resball -> build/emery/app_resources.pbpack
+[32/39] Compiling emery | generate_resource_id_header: build/emery/system_resources.resball -> build/emery/src/resource_ids.auto.h
+[33/39] Compiling emery | c: build/emery/src/resource_ids.auto.c -> build/emery/src/resource_ids.auto.c.17.o
+[34/39] Compiling emery | c: src/c/about.c -> build/src/c/about.c.17.o
+[35/39] Compiling emery | c: src/c/main.c -> build/src/c/main.c.17.o
+[36/39] Compiling emery | c: src/c/postcard.c -> build/src/c/postcard.c.17.o
+[37/39] Compiling emery | c: build/emery/appinfo.auto.c -> build/emery/appinfo.auto.c.17.o
+[38/39] Linking emery | cprogram: build/src/c/about.c.17.o build/src/c/game.c.17.o build/src/c/main.c.17.o build/src/c/postcard.c.17.o build/src/c/report.c.17.o build/src/c/save.c.17.o build/emery/appinfo.auto.c.17.o build/emery/src/resource_ids.auto.c.17.o -> build/emery/pebble-app.elf
+/Users/luke/Library/Application Support/Pebble SDK/SDKs/4.33.1/toolchain/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/bin/ld: warning: /private/var/folders/kl/6kmp_kld6hx_70h5kqwb97k00000gn/T/micro-dose-owner-portable-p18wi0_8/micro-dose/build/emery/pebble-app.elf has a LOAD segment with RWX permissions
+
+[39/39] Processing emery | memory_usage_report: build/emery/pebble-app.elf build/emery/app_resources.pbpack
+-------------------------------------------------------
+EMERY APP MEMORY USAGE
+Total size of resources:        9847 bytes / 256.0KB
+Total footprint in RAM:         17008 bytes / 128.0KB
+Free RAM available (heap):      114064 bytes
+------------------------------------------------------- 
+[40/44] Compiling gabbro | /private/var/folders/kl/6kmp_kld6hx_70h5kqwb97k00000gn/T/micro-dose-owner-portable-p18wi0_8/micro-dose/build/gabbro/pebble-app.raw.bin: build/gabbro/pebble-app.elf -> build/gabbro/pebble-app.raw.bin
+[41/44] Compiling emery | /private/var/folders/kl/6kmp_kld6hx_70h5kqwb97k00000gn/T/micro-dose-owner-portable-p18wi0_8/micro-dose/build/emery/pebble-app.raw.bin: build/emery/pebble-app.elf -> build/emery/pebble-app.raw.bin
+[42/44] Processing gabbro | inject-metadata: build/gabbro/pebble-app.raw.bin build/gabbro/pebble-app.elf build/gabbro/app_resources.pbpack -> build/gabbro/pebble-app.bin
+[43/44] Processing emery | inject-metadata: build/emery/pebble-app.raw.bin build/emery/pebble-app.elf build/emery/app_resources.pbpack -> build/emery/pebble-app.bin
+[44/44] Creating app_bundle:  -> build/micro-dose.pbw
+Waf: Leaving directory `/private/var/folders/kl/6kmp_kld6hx_70h5kqwb97k00000gn/T/micro-dose-owner-portable-p18wi0_8/micro-dose/build'
+'build' finished successfully (0.741s)
+
+[1m[33mA new pebble-tool is available: v5.0.40 (current: v5.0.39)[0m
+[33m  Update with: uv tool upgrade pebble-tool[0m
