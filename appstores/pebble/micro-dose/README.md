@@ -1,6 +1,6 @@
 # Micro Dose Syndicate for Pebble
 
-By Luke Steuber. Native testing build 0.5.1.
+By Luke Steuber. Native testing build 0.5.2.
 
 A fictional calculator-era economy adapted for Pebble. Read the night's intel, set price, quantity, quality and distribution, then run the night. Grow cash and credibility while keeping heat below 100. Negative cash ends the run; heat at 100 brings a bust.
 
@@ -8,10 +8,12 @@ Version 0.5.0 brings the ledger closer: 24 bold text for actions and prose, 28 b
 
 Version 0.5.1 adds About to the pause menu, with Luke Steuber's portrait and the app version. Select, Back or a tap returns to the same menu choice while the campaign stays paused. The portrait loads only while that screen is open.
 
+Version 0.5.2 makes touch controls match the drawn cards and buttons. Taps in margins, gaps and hint text leave the plan alone. Back saves the edited plan before returning to the dashboard, including before an unexpected restart. The editor's completion button says Keep plan.
+
 - Up/Down browse Price, Cook, Quality, Lane, District, Front, Run night, Career, and Lay low.
 - Select opens a setting. Up/Down adjust it; Select returns to the dashboard. Back also leaves the editor with its current values.
 - On the dashboard, tap the displayed setting to edit; the bottom left/right areas browse settings.
-- In an editor, tap left/right to decrease/increase. Tap Select to keep to finish.
+- In an editor, tap the left/right half of the value card to decrease/increase. Tap Keep plan to finish.
 - Districts and fronts show their price and require a separate purchase confirmation. Owned items cannot be charged twice.
 - Run night produces a report; dismiss it before another night can run.
 - Back pauses; New empire requires confirmation.
@@ -64,7 +66,7 @@ Targets: Pebble Time 2 (`emery`, 200 by 228) and Pebble Round 2 (`gabbro`, 260 b
 
 Native emulator validation uses firmware 4.33.2. Older firmware and physical watches are unverified. Physical touch accuracy, readability under room light and battery behavior still need device testing.
 
-Packaged artifacts live under `release/0.5.1/`, including PBW, standalone native source, screenshots, reports and SHA-256 sums. [Micro Dose 0.5.1](https://apps.repebble.com/0e8d7ac981644076ac833e25) is public; its Store download matches the frozen PBW. See the [publication receipt](store/0.5.1/publication.json). Older release packages remain available.
+The 0.5.2 candidate uses `release/0.5.2/` for its PBW, standalone native source, screenshots, reports and SHA-256 sums. [Micro Dose 0.5.1](https://apps.repebble.com/0e8d7ac981644076ac833e25) remains the public version; its Store download matches the frozen PBW. See the [publication receipt](store/0.5.1/publication.json). Older release packages remain available.
 
 
 The native campaign suite (`test/native_campaign.py emery` and `gabbro`, using

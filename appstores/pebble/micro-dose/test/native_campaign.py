@@ -121,9 +121,12 @@ def run(platform):
         deadline = time.monotonic() + 4
         while count() == previous and time.monotonic() < deadline:
             time.sleep(.02)
-        assert count() > previous, 'Native input did not respond'
-        time.sleep(.1)
-    def button(name, hold=.07):
+        if count() == previous:
+            pixels = cmd._grab_processed_image(argparse.Namespace(no_correction=True, scale=1, no_open=True, v=0), show_progress=False)
+            png.from_array(pixels, mode='RGBA;8').save(str(out / f'{platform}-input-failure.png'))
+            raise AssertionError('Native input did not respond; failure frame saved')
+        time.sleep(.2)
+    def button(name, hold=.2):
         previous = count()
         send_data_to_qemu(watch.transport, QemuButton(state=getattr(QemuButton.Button, name)))
         time.sleep(hold)

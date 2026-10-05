@@ -183,6 +183,11 @@ def run(platform):
         expect(screen=1, menu=3, **about_state)  # Held gesture cannot reopen About.
         button('Back'); expect(screen=0, **about_state)
         button('Select');expect(screen=4)
+        unchanged=current()
+        for px,py in [(2,100),(width//2,150)]:
+            n=count();pointer(px,py,True);time.sleep(.05);pointer(px,py,False);time.sleep(.25)
+            assert count()==n,'Tap outside the drawn editor control changed state'
+            expect(screen=4,price=unchanged['price'])
         touch([(width*3//4,100)])
         grab('edit')
         touch([(width//2, height - (66 if platform == 'gabbro' else 46) + 18)])
@@ -203,6 +208,24 @@ def run(platform):
         button('Select');expect(screen=6)
         grab('purchase')
         button('Select');expect(screen=0,cash=before['cash'])
+        # Back keeps plan changes in the durable save, even across relaunch.
+        for _ in range(4):button('Up')
+        expect(choice=0)
+        before_back=current()
+        button('Select');expect(screen=4)
+        button('Down')
+        edited=current()
+        button('Back');expect(screen=0)
+        previous=count()
+        execute('system_reset');time.sleep(5)
+        # Firmware resets the log-shipping flag; require fresh post-boot state.
+        watch.send_packet(AppLogShippingControl(enable=True))
+        watch.send_packet(AppRunState(data=AppRunStateStart(uuid=APP)))
+        response(previous)
+        expect(screen=0,price=edited['price'])
+        button('Select');button('Up');button('Select')
+        expect(screen=0,price=before_back['price'])
+        for _ in range(4):button('Down')
         button('Back');expect(screen=1);grab('pause')
         touch([(width//2, 34 + 2 * 38 + 18)])
         expect(screen=3);grab('confirm')
@@ -276,7 +299,7 @@ def run(platform):
         expect(screen=0,rank=1,earned=before['earned'],cash=before['cash'])
         assert not any('fault' in x.lower() or 'crash' in x.lower() for x in logs)
         report={'platform':platform,'sdk':SDK_VERSION,'pbwSHA256':installed_sha,'passed':True,'checks':['launch','help','edit plan','run night and report','save and relaunch','touch edit and enlarged keep row','enlarged menu and confirmation touch rows','cancel purchase','cancel reset','denied purchase report','completed-night numbering','repeated illustrated reports','touch report dismissal','terminal report','earned promotion','career objectives','lay low cost and heat','rank and earnings resume'],'frames':frames,'logs':logs}
-        report['checks'] += ['About portrait', 'About Select/Back/tap returns to original menu selection', 'About repeated reopen and no tap-through', 'five-row menu touch Save and exit resumes exact campaign']
+        report['checks'] += ['About portrait', 'About Select/Back/tap returns to original menu selection', 'About repeated reopen and no tap-through', 'five-row menu touch Save and exit resumes exact campaign', 'editor outer margin and hint do not activate controls', 'Back persists plan before relaunch']
         (out/f'{platform}-report.json').write_text(json.dumps(report,indent=2))
         print('PASS',platform)
     finally:

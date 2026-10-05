@@ -38,9 +38,16 @@ static void text(GContext *c, const char *s, int y, int height, bool large) {
 static void compact(GContext *c, const char *s, int y, int height) {
   words(c, s, y, height, UI_FONT_SMALL);
 }
+static GRect row_bounds(int y) {
+  int inset=PBL_IF_ROUND_ELSE(y>180?48:26,8);
+  return GRect(inset,y,w-2*inset,UI_ROW_HEIGHT-2);
+}
+static bool hit(GRect r,int x,int y){return x>=r.origin.x&&x<r.origin.x+r.size.w&&y>=r.origin.y&&y<r.origin.y+r.size.h;}
+static GRect plan_bounds(void){int inset=PBL_IF_ROUND_ELSE(24,7);return GRect(inset,150,w-2*inset,51);}
+static GRect navigation_bounds(void){int inset=PBL_IF_ROUND_ELSE(24,8);return GRect(inset,h-(h>240?45:25),w-2*inset,23);}
 static void row(GContext *c, const char *s, int y, bool on) {
-  int inset = PBL_IF_ROUND_ELSE(y > 180 ? 48 : 26, 8);
-  GRect bounds = GRect(inset, y, w - 2 * inset, UI_ROW_HEIGHT - 2);
+  GRect bounds = row_bounds(y);
+  int inset=bounds.origin.x;
   graphics_context_set_fill_color(c, on ? GColorWhite : GColorBlack);
   graphics_fill_rect(c, bounds, 3, GCornersAll);
   if (on) {
@@ -192,7 +199,7 @@ static void draw(Layer *l, GContext *c) {
     value(b, sizeof b);
     text(c, b, 80, 65, true);
     compact(c, "Up - / Down +", 151, 24);
-    row(c, "Select to keep", edit_keep_top(), true);
+    row(c, "Keep plan", edit_keep_top(), true);
     return;
   }
   // A compact city silhouette frames the ledger without occupying text rows.
@@ -227,7 +234,7 @@ static void draw(Layer *l, GContext *c) {
            events[g.event]);
   compact(c, b, 107, 42);
   graphics_context_set_stroke_color(c, GColorLightGray);
-  graphics_draw_round_rect(c, GRect(PBL_IF_ROUND_ELSE(24, 7), 150, w - PBL_IF_ROUND_ELSE(48, 14), 51), 3);
+  graphics_draw_round_rect(c, plan_bounds(), 3);
   graphics_context_set_fill_color(c, GColorCyan);
   graphics_fill_rect(c, GRect(PBL_IF_ROUND_ELSE(26, 9), 156, 3, 39), 0, GCornerNone);
   value(b, sizeof b);
@@ -243,8 +250,8 @@ static void refresh(void) {
   APP_LOG(APP_LOG_LEVEL_INFO, "MD career rank=%d earned=%ld good=%lu quiet=%lu",
           g.rank, (long)g.earned, (unsigned long)g.good_nights, (unsigned long)g.quiet_nights);
   APP_LOG(APP_LOG_LEVEL_INFO,
-          "MD screen=%d menu=%d choice=%d day=%d cash=%ld heat=%d over=%d", screen,
-          menu, choice, g.day, (long)g.cash, g.heat, g.over);
+          "MD screen=%d menu=%d choice=%d day=%d cash=%ld heat=%d over=%d price=%d", screen,
+          menu, choice, g.day, (long)g.cash, g.heat, g.over, g.price);
   if (screen == 5)
     APP_LOG(APP_LOG_LEVEL_INFO, "MD report_scene=%d report_day=%d purchase=%d",
             scene, report_day, purchase_report);
@@ -350,9 +357,10 @@ static void action(int b) {
       screen = choice == 4 || choice == 5 ? 6 : 0;
       menu = 0;
       save();
-    } else if (b == 3)
+    } else if (b == 3) {
+      save();
       screen = 0;
-    else {
+    } else {
       int d = b == 0 ? -1 : 1;
       if (choice == 0)
         g.price = adjust(g.price, d * 5, 20, 200);
@@ -431,32 +439,27 @@ static void touch(const TouchEvent *e, void *x) {
   } else if (e->type == TouchEvent_PositionUpdate) {
     if (abs(e->x - sx) > 8 || abs(e->y - sy) > 8)
       moved = true;
-  } else {
+  } else if(e->type==TouchEvent_Liftoff) {
     bool tap = touching && !moved && abs(e->x - sx) <= 8 && abs(e->y - sy) <= 8;
     cancel_tap();
     if (!tap)
       return;
     if (save_failed || screen == 2 || screen == 5 || screen == 7 || screen == ABOUT_SCREEN)
       action(1);
-    else if (screen == 1 && sy >= MENU_TOP && sy < MENU_TOP + MENU_COUNT * UI_ROW_HEIGHT) {
-      menu = (sy - MENU_TOP) / UI_ROW_HEIGHT;
-      action(1);
-    } else if (screen == 3 && sy >= 132 && sy < 210) {
-      menu = sy >= 172;
-      action(1);
-    } else if (screen == 6 && sy >= 138 && sy < 216) {
-      menu = sy >= 178;
-      action(1);
+    else if (screen == 1) {
+      for(int i=0;i<MENU_COUNT;i++)if(hit(row_bounds(MENU_TOP+i*UI_ROW_HEIGHT),sx,sy)){menu=i;action(1);break;}
+    } else if (screen == 3) {
+      if(hit(row_bounds(132),sx,sy)){menu=0;action(1);}
+      else if(hit(row_bounds(172),sx,sy)){menu=1;action(1);}
+    } else if (screen == 6) {
+      if(hit(row_bounds(138),sx,sy)){menu=0;action(1);}
+      else if(hit(row_bounds(178),sx,sy)){menu=1;action(1);}
     } else if (screen == 4) {
-      if (sy >= edit_keep_top())
-        action(1);
-      else if (sy >= 75)
-        action(sx < w / 2 ? 0 : 2);
-    } else if (!screen && sy >= 150) {
-      if (sy >= h - 35)
-        action(sx < w / 2 ? 0 : 2);
-      else
-        action(1);
+      if(hit(row_bounds(edit_keep_top()),sx,sy))action(1);
+      else {int inset=PBL_IF_ROUND_ELSE(24,8);if(hit(GRect(inset,80,w-2*inset,65),sx,sy))action(sx<w/2?0:2);}
+    } else if (!screen) {
+      if(hit(navigation_bounds(),sx,sy))action(sx<w/2?0:2);
+      else if(hit(plan_bounds(),sx,sy))action(1);
     }
   }
 }
