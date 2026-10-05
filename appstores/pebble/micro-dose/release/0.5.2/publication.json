@@ -1,0 +1,326 @@
+{
+  "slug": "micro-dose",
+  "version": "0.5.2",
+  "appId": "0e8d7ac981644076ac833e25",
+  "uuid": "019023c6-f7ee-470b-bd83-83a849974d80",
+  "url": "https://apps.repebble.com/0e8d7ac981644076ac833e25",
+  "pbwSHA256": "db6ea103e28b785d14f7f9b2bbcaa453c24dcac7da2c282ba3fe0b92df71fd8c",
+  "sourceZipSHA256": "7d288f122ebea08af4f6499bee5e37a4890b5b4e5bed5ce11a37249152189f69",
+  "nativeTargets": [
+    "emery",
+    "gabbro"
+  ],
+  "authorization": "Owner explicitly authorized reviewed replacements; gallery delivered before uploading.",
+  "physicalAcceptance": "Pending",
+  "mirror": {
+    "url": "https://github.com/ambient-time/pebble-micro-dose",
+    "visibility": "PRIVATE",
+    "defaultBranch": "main",
+    "sha": "1100aee181672799a7091db328ef78e819e0afbb",
+    "tree": "088e0c921e2d7e55fe118078f8f6c172c2f537d9",
+    "packageVersion": "0.5.2",
+    "uuid": "019023c6-f7ee-470b-bd83-83a849974d80",
+    "sourceZipSHA256": "7d288f122ebea08af4f6499bee5e37a4890b5b4e5bed5ce11a37249152189f69",
+    "verifiedAt": "2026-10-05T05:30:28.006083+00:00",
+    "sourceArchiveParity": "Every archived project file byte-matches private mirror main; prior history retained."
+  },
+  "submittedAt": "2026-10-05T05:38:48.893192+00:00",
+  "state": "published",
+  "savedMedia": [
+    {
+      "file": "store/icons/list-80.png",
+      "url": "https://appstore-api.repebble.com/api/assets/icons/0e8d7ac981644076ac833e25/small/3d1d6132-ab80-4ead-898b-85a1298a9bbe.png",
+      "uploadedSHA256": "f0e2eda9505edf8eb5baf7b5e85bb6bdd0dcfd47073456b136326c46a4b2e0f3",
+      "servedSHA256": "1dc778eef90c3940ad257f5b739952647d42207402e5052a6a7697a96f3c7b8b",
+      "dimensions": [
+        80,
+        80
+      ],
+      "meanChannelError": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rmsChannelError": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "file": "store/icons/list-144.png",
+      "url": "https://appstore-api.repebble.com/api/assets/icons/0e8d7ac981644076ac833e25/large/348f0f55-a8ba-4ac9-89a9-0ebcadffcde4.png",
+      "uploadedSHA256": "cfe0a8dfdb0669e1da456ab27f0fd1981d5762ec35b5adba95f9caf00c955126",
+      "servedSHA256": "9714ba6122f13b0658266a5bfcafa196e0761d808b0f6c29cc4f079fb698f87b",
+      "dimensions": [
+        144,
+        144
+      ],
+      "meanChannelError": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rmsChannelError": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "file": "store/screenshots/emery_map.png",
+      "url": "https://appstore-api.repebble.com/api/assets/screenshots/0e8d7ac981644076ac833e25/emery/f5c58dfa-6a3d-4a20-8223-c75c6a364be4.png",
+      "uploadedSHA256": "4d68534a8a615f44f2a2cb82c891ea8e5e4f345112d57d12b655cd3bc613571c",
+      "servedSHA256": "63a7fb10fbc8f5c2b5ad4448302e83c8be8fa6d94edae6e08237b36552034ef5",
+      "dimensions": [
+        200,
+        228
+      ],
+      "meanChannelError": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rmsChannelError": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "file": "store/screenshots/emery_edit.png",
+      "url": "https://appstore-api.repebble.com/api/assets/screenshots/0e8d7ac981644076ac833e25/emery/90ea2de7-2db5-4f36-b7df-7be4e0115087.png",
+      "uploadedSHA256": "cedc8f7dc831137adc6573f111165a3c3a0ea43a7d0a3a0351153c583f1c5f53",
+      "servedSHA256": "ac7e1e48a636bbd856b1fdb046550eea02041e0d8203799b2cd7e08db6d0af80",
+      "dimensions": [
+        200,
+        228
+      ],
+      "meanChannelError": [
+        0.0,
+        0.010087719298245614,
+        0.010087719298245614
+      ],
+      "rmsChannelError": [
+        0.0,
+        0.6505732964356036,
+        0.6505732964356036
+      ]
+    },
+    {
+      "file": "store/screenshots/emery_report.png",
+      "url": "https://appstore-api.repebble.com/api/assets/screenshots/0e8d7ac981644076ac833e25/emery/44f22070-6cf6-47d5-94f8-e311db4cb13f.png",
+      "uploadedSHA256": "bbc845c0ade4cafea8b5e675fcb82c69066001e256266114ba1ff6d9497fabb0",
+      "servedSHA256": "30bdcd91fdc96ab26bc7cd2d41d780146994cdbed483580ad9ea0c3d222693c4",
+      "dimensions": [
+        200,
+        228
+      ],
+      "meanChannelError": [
+        0.0,
+        0.003969298245614035,
+        0.0281140350877193
+      ],
+      "rmsChannelError": [
+        0.0,
+        0.381162809989771,
+        1.0815234544179522
+      ]
+    },
+    {
+      "file": "store/screenshots/emery_pause.png",
+      "url": "https://appstore-api.repebble.com/api/assets/screenshots/0e8d7ac981644076ac833e25/emery/eb9fbf07-69b1-4669-90ab-f4b305e10113.png",
+      "uploadedSHA256": "e6b81a0dc04290674c54c89f14bd469bfb10614c034e20ba2ca661fbf22d64d3",
+      "servedSHA256": "65fdd08bdc70a10ff73453d46366fccd25d734f692bdeaaa3c8d6b1a6f0c64a9",
+      "dimensions": [
+        200,
+        228
+      ],
+      "meanChannelError": [
+        0.0,
+        0.010087719298245614,
+        0.010087719298245614
+      ],
+      "rmsChannelError": [
+        0.0,
+        0.6505732964356036,
+        0.6505732964356036
+      ]
+    },
+    {
+      "file": "store/screenshots/emery_career.png",
+      "url": "https://appstore-api.repebble.com/api/assets/screenshots/0e8d7ac981644076ac833e25/emery/36b3dfbd-4f03-47a7-a569-2fd1cf713175.png",
+      "uploadedSHA256": "2046ff6e00daee0ad8cdf4a1153adf182a47082c27a2ab8cd84492ddc6b44a49",
+      "servedSHA256": "ad9b7d1b40f321bb64926dc77017a7b9e8c30355459b5f9a8d3f5aee84865ca5",
+      "dimensions": [
+        200,
+        228
+      ],
+      "meanChannelError": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rmsChannelError": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "file": "store/banners/emery.png",
+      "url": "https://appstore-api.repebble.com/api/assets/banners/0e8d7ac981644076ac833e25/emery/7e6ce9ca-c863-42f7-a93f-c4b367d679ab.png",
+      "uploadedSHA256": "be51f44aca2a45156ef98d1285d033c242237ca03826476ac9403e85f5f65bf1",
+      "servedSHA256": "f3e67d29dbde342962f76d921902f6c9a41dfdd5caa44c864cfbc438f9b37669",
+      "dimensions": [
+        720,
+        320
+      ],
+      "meanChannelError": [
+        0.04700954861111111,
+        0.043229166666666666,
+        0.04095486111111111
+      ],
+      "rmsChannelError": [
+        0.5832998502295177,
+        0.5753999213107736,
+        0.5441369951073391
+      ]
+    },
+    {
+      "file": "store/screenshots/gabbro_map.png",
+      "url": "https://appstore-api.repebble.com/api/assets/screenshots/0e8d7ac981644076ac833e25/gabbro/dd26254c-6150-4fa7-8c4a-33f633e7525d.png",
+      "uploadedSHA256": "6ceca11ff904febbb5dbe98fb0b20c495adf1045bb6e9ce6c13474b809ec73d4",
+      "servedSHA256": "307d74fd7e82d5b806de74331c1f73e3bef53fef23485593504d9bff2d938b7f",
+      "dimensions": [
+        260,
+        260
+      ],
+      "meanChannelError": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rmsChannelError": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "file": "store/screenshots/gabbro_edit.png",
+      "url": "https://appstore-api.repebble.com/api/assets/screenshots/0e8d7ac981644076ac833e25/gabbro/52935ef0-d136-4ce0-9639-e44f05874cca.png",
+      "uploadedSHA256": "7be108d67a4652ac82365c329dbed1ee908b606c46041387f0d9c29cb51e6fd6",
+      "servedSHA256": "4f5651b698d3d74e60a640209f333cca9bbd36ec5ab591a7a25917a05f2bc44d",
+      "dimensions": [
+        260,
+        260
+      ],
+      "meanChannelError": [
+        0.0,
+        0.006804733727810651,
+        0.006804733727810651
+      ],
+      "rmsChannelError": [
+        0.0,
+        0.5343247688249925,
+        0.5343247688249925
+      ]
+    },
+    {
+      "file": "store/screenshots/gabbro_report.png",
+      "url": "https://appstore-api.repebble.com/api/assets/screenshots/0e8d7ac981644076ac833e25/gabbro/fe0bcba8-6e62-4dda-af15-0cfd189e0bd8.png",
+      "uploadedSHA256": "900bb74a38be9033ac5a581e60fee07231d211ecd1197e4f591754287cfe6133",
+      "servedSHA256": "2bad650eaf0652842e3b0516bf7ddeefcb368bee8abcc0ef553eb41b23ed3b3a",
+      "dimensions": [
+        260,
+        260
+      ],
+      "meanChannelError": [
+        0.015088757396449704,
+        0.01257396449704142,
+        0.01257396449704142
+      ],
+      "rmsChannelError": [
+        0.7921583130280262,
+        0.7314773896694505,
+        0.7314773896694505
+      ]
+    },
+    {
+      "file": "store/screenshots/gabbro_pause.png",
+      "url": "https://appstore-api.repebble.com/api/assets/screenshots/0e8d7ac981644076ac833e25/gabbro/3514fc8e-1450-4a93-8f98-bf7be7e2b8c1.png",
+      "uploadedSHA256": "2801eba80f298478800ded2e9bb9d5465779fdd1a3dadfa16223815728d73292",
+      "servedSHA256": "6bf892678856621710f302c92016a59970d63e67aa4ac006f7119cf63980df6e",
+      "dimensions": [
+        260,
+        260
+      ],
+      "meanChannelError": [
+        0.002514792899408284,
+        0.0034023668639053253,
+        0.0034023668639053253
+      ],
+      "rmsChannelError": [
+        0.462339049237358,
+        0.37782466739208653,
+        0.37782466739208653
+      ]
+    },
+    {
+      "file": "store/screenshots/gabbro_career.png",
+      "url": "https://appstore-api.repebble.com/api/assets/screenshots/0e8d7ac981644076ac833e25/gabbro/c1d26c5a-539e-4d0f-b944-26cd891c11d1.png",
+      "uploadedSHA256": "d8186c886c16c8063d33d6b4241effa3dcabdd9c357825dc451702173fc201cf",
+      "servedSHA256": "d36fad98135c0edb6e6786ac7bc5949363b9e18b6da1fdf17dca22f4cd849f1f",
+      "dimensions": [
+        260,
+        260
+      ],
+      "meanChannelError": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rmsChannelError": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "file": "store/banners/gabbro.png",
+      "url": "https://appstore-api.repebble.com/api/assets/banners/0e8d7ac981644076ac833e25/gabbro/d3a98c2f-980e-4fb3-a79a-f8fb2f22b558.png",
+      "uploadedSHA256": "d16072fc9d0145450a5f12c5558973c9e9261e642566b9afa7ba9e456b6c20e8",
+      "servedSHA256": "62e480a1773d1086b7e00ec1c2a3cffa65f24285f8540dd5676a7fe8de942cae",
+      "dimensions": [
+        720,
+        320
+      ],
+      "meanChannelError": [
+        0.0407421875,
+        0.03969184027777778,
+        0.0428515625
+      ],
+      "rmsChannelError": [
+        0.5452963325365189,
+        0.5342643241463495,
+        0.5301868446856992
+      ]
+    }
+  ],
+  "savedMediaVerifiedAt": "2026-10-05T05:38:59.681554+00:00",
+  "published": true,
+  "visible": true,
+  "title": "Micro Dose",
+  "description": "Remember that drug game on your graphing calculator? ... that.\r\n\r\nA fictional calculator-era underworld economy. Read the night\u2019s forecast, set price, quantity, quality and distribution, then run the night and see what happened. \r\n\r\nClimb six career levels from Runner to Empire. Earn profits, buy districts and fronts, and unlock new distribution routes. Career shows your next unfinished goal. Lay low reduces heat while your fronts still bring in income.\r\n\r\nBuild the Empire by earning $60,000 net, owning all six districts and three fronts, and keeping heat below 60. You can keep playing afterward. Negative cash or heat at 100 ends the campaign. Up and Down browse; Select edits or acts. Progress saves automatically.\r\n\r\nFor Pebble Time 2 and Round 2. Touch requires firmware 4.33.2; button controls remain available. By Luke Steuber.",
+  "releaseId": "67d1187a050546fbb0ad67f7",
+  "publishedAt": "2026-10-05T05:39:00.228",
+  "verifiedAt": "2026-10-05T05:39:01.827054+00:00",
+  "timeZone": "UTC",
+  "downloadURL": "https://appstore-api.repebble.com/api/assets/pbw/0e8d7ac981644076ac833e25/0.5.2/7a41a3c7-ab1c-4e54-a7b1-57a9352c0aa6.pbw",
+  "downloadHashMatched": true,
+  "retiredCompatibilityReleases": [],
+  "historicalCompatibilityReleases": [],
+  "storeMedia": "10 screenshots, 2 banners and 2 icons saved and downloaded",
+  "storeSubmission": "Existing listing updated; published release and exact public package verified."
+}

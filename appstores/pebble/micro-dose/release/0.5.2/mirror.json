@@ -1,0 +1,12 @@
+{
+  "url": "https://github.com/ambient-time/pebble-micro-dose",
+  "visibility": "PRIVATE",
+  "defaultBranch": "main",
+  "sha": "1100aee181672799a7091db328ef78e819e0afbb",
+  "tree": "088e0c921e2d7e55fe118078f8f6c172c2f537d9",
+  "packageVersion": "0.5.2",
+  "uuid": "019023c6-f7ee-470b-bd83-83a849974d80",
+  "sourceZipSHA256": "7d288f122ebea08af4f6499bee5e37a4890b5b4e5bed5ce11a37249152189f69",
+  "verifiedAt": "2026-10-05T05:30:28.006083+00:00",
+  "sourceArchiveParity": "Every archived project file byte-matches private mirror main; prior history retained."
+}
